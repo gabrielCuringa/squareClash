@@ -1,4 +1,15 @@
 #game{
     border: solid 1px;
     background: yellowgreen;
+    float: left;
+}
+
+#zoneJeu{
+    width: 100%;
+    display: inline-block;
+}
+
+#zoneAttaquant li{
+
+    list-style: none;
 }

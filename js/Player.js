@@ -1,22 +1,33 @@
 class Player extends Forme{
 
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, pv){
+        super(posX, posY, couleur, vitesseX, vitesseY, width, height);
+
+    }
+
+}
+
+class Attaquant extends Player{
+
     constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
+    }
+
+    attaquer(monstre){
 
 
     }
 
-    draw(ctx){
-        ctx.save();
+}
 
-        ctx.translate(this.posX, this.posY);
-        ctx.fillStyle = this.couleur;
+class Defenseur extends Player{
 
-        ctx.shadowColor = 'black';
-        ctx.shadowBlur = 10;
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, pv){
+        super(posX, posY, couleur, vitesseX, vitesseY, width, height);
+        this.pv = pv;
+    }
 
-        ctx.fillRect(0, 0, this.width, this.height);
+    tirer(){
 
-        ctx.restore();
     }
 }

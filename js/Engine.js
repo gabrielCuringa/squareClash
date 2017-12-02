@@ -1,4 +1,5 @@
 let attaquant, defenseur;
+let monstres = [];
 
 function Engine() {
 
@@ -10,24 +11,25 @@ function Engine() {
         width = canvas.width;
         height = canvas.height;
 
-        attaquant = creerJoueur();
+        attaquant = creerAttaquant();
+        defenseur = creerDefenseur();
 
         window.addEventListener('keydown', function(event){
             if (event.keyCode === 37) {
 
-                attaquant.vitesseX = -5;
+                defenseur.vitesseX = -5;
 
             }else if (event.keyCode === 39) {
 
-                attaquant.vitesseX = 5;
+                defenseur.vitesseX = 5;
 
             }else if(event.keyCode === 38){
 
-                attaquant.vitesseY = -5;
+                defenseur.vitesseY = -5;
 
             }else if(event.keyCode === 40){
 
-                attaquant.vitesseY = 5;
+                defenseur.vitesseY = 5;
 
             }else if(event.keyCode === 81){//touche q
 
@@ -38,10 +40,9 @@ function Engine() {
 
         //clavier non touché
         window.addEventListener('keyup', function(event){
-            attaquant.vitesseY = 0;
-            attaquant.vitesseX = 0;
+            defenseur.vitesseY = 0;
+            defenseur.vitesseX = 0;
         }, false);
-
 
         requestAnimationFrame(anime);
     }
@@ -50,25 +51,59 @@ function Engine() {
 
         ctx.clearRect(0, 0, width, height);
 
-        attaquant.draw(ctx);
+        //attaquant
+        defenseur.draw(ctx);
+        defenseur.move();
 
-        attaquant.move();
+        monstres.forEach(function (monstre) {
+            monstre.draw(ctx);
+            monstre.move();
+        });
+
 
         requestAnimationFrame(anime);
 
     }
     
-    function creerJoueur() {
+    function creerAttaquant() {
 
         let x = 250;
         let y = 250;
 
-        return new Player(x, y, "rgb('255','255','255')", 0, 0, 70, 30);
+        return new Attaquant(x, y, "rgb('255','255','255')", 0, 0, 70, 30);
+    }
 
+    function creerDefenseur() {
+
+        let x = 250;
+        let y = 250;
+
+        return new Defenseur(x, y, "rgb('255','255','255')", 0, 0, 70, 30, 100);
+    }
+
+    function creerDeck() {
+
+    }
+    
+    function dragStartHandler(event) {
+        event.dataTransfer.setData("monstre", event.target.dataset.value);
+        
+    }
+    
+    function dropHandler(event) {
+
+        var data = event.dataTransfer.getData("monstre");
+
+        if(data == "blue"){
+            monstres.push(new Monstre(event.clientX, event.clientY, "rgb('0','0','0')", 0, 0, 20, 20, 4));
+            event.preventDefault();
+        }
     }
 
     return{
-        init:init
+        init:init,
+        dropHandler:dropHandler,
+        dragStartHandler,dragStartHandler
     }
 
 }
