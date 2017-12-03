@@ -36,4 +36,21 @@ class Forme{
     inverseSensDeplacementY() {
         this.vitesseY = -this.vitesseY;
     }
+
+    testeCollisionZone(w, h) {
+        if(((this.posX+this.width) >  w) || (this.posX < 0)) {
+            this.inverseSensDeplacementX();
+        }
+        if(((this.posY+this.height) >  h) || (this.posY < 0)) {
+            this.inverseSensDeplacementY();
+        }
+    }
+}
+
+class Arme{
+
+    constructor(posX, posY, degat){
+
+    }
+
 }

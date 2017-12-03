@@ -7,14 +7,18 @@ class Player extends Forme{
 
 }
 
-class Attaquant extends Player{
+class Attaquant{
 
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
-        super(posX, posY, couleur, vitesseX, vitesseY, width, height);
+    constructor(){
+
+        this.monstres = [];
+    }
+
+    ajouterMonstre(monstre){
+        this.monstres.push(monstre);
     }
 
     attaquer(monstre){
-
 
     }
 
@@ -27,7 +31,13 @@ class Defenseur extends Player{
         this.pv = pv;
     }
 
+    drawVie(ctx){
+        ctx.font = 'bold 16pt Helvetica';
+        ctx.fillText(this.pv, this.posX+15, this.posY+50);
+    }
+
     tirer(){
 
     }
 }
+

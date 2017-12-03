@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/Particle.js"></script>
     <script src="../js/Forme.js"></script>
     <script src="../js/Player.js"></script>
     <script src="../js/Monstre.js"></script>
@@ -17,6 +18,7 @@
         <ul>
             <li>Blue : Rapide, peu de dégâts</li>
             <li>Red : Lent, gros dégats</li>
+            <li>Yellow : Lent, peu de dégâts, se dirige vers le défenseur</li>
         </ul>
     </div>
     <div id="zoneJeu">
@@ -24,7 +26,7 @@
     </div>
     <div id="zoneAttaquant">
         <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="blue">Blue</li>
-        <li draggable="true">Red</li>
+        <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="yellow">Yellow</li>
     </div>
 </body>
 </html>

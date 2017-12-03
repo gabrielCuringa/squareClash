@@ -1,5 +1,5 @@
 let attaquant, defenseur;
-let monstres = [];
+let particles = [];
 
 function Engine() {
 
@@ -53,14 +53,20 @@ function Engine() {
 
         //attaquant
         defenseur.draw(ctx);
+        defenseur.drawVie(ctx);
         defenseur.move();
 
-        monstres.forEach(function (monstre) {
+        attaquant.monstres.forEach(function (monstre) {
             monstre.draw(ctx);
+            if(monstre instanceof Yellow){
+                monstre.suivreJoueur(defenseur.posX, defenseur.posY);
+            }
             monstre.move();
+            monstre.testCollision();
         });
 
 
+        updateAndDrawParticules(10, ctx);
         requestAnimationFrame(anime);
 
     }
@@ -78,7 +84,7 @@ function Engine() {
         let x = 250;
         let y = 250;
 
-        return new Defenseur(x, y, "rgb('255','255','255')", 0, 0, 70, 30, 100);
+        return new Defenseur(x, y, "rgb(255,255,255)", 0, 0, 70, 30, 100);
     }
 
     function creerDeck() {
@@ -94,8 +100,11 @@ function Engine() {
 
         var data = event.dataTransfer.getData("monstre");
 
-        if(data == "blue"){
-            monstres.push(new Monstre(event.clientX, event.clientY, "rgb('0','0','0')", 0, 0, 20, 20, 4));
+        if(data === "blue"){
+            //monstres.push(new Monstre(event.clientX, event.clientY, "rgb('0','0','0')", 0, 0, 20, 20, 4));
+            event.preventDefault();
+        }else if(data === "yellow"){
+            attaquant.ajouterMonstre(new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20, 4));
             event.preventDefault();
         }
     }
