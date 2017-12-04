@@ -1,8 +1,9 @@
 class Monstre extends Forme{
 
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, degat){
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.degat = degat;
+        this.cout = cout;
     }
 
     testCollision(){
@@ -11,21 +12,20 @@ class Monstre extends Forme{
             //console.log("vrai");
             attaquant.monstres.splice(attaquant.monstres.indexOf(this), 1);
 
-            this.attaquer(defenseur);
+            this.attaquer();
             startDoubleExplosion(this.posX, this.posY);
         }
     }
 
-    attaquer(joueur){
-        joueur.pv -= this.degat;
+    attaquer(){
+        defenseur.pv -= this.degat;
     }
 }
 
 class Yellow extends Monstre{
 
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, degat){
-        super(posX, posY, couleur, vitesseX, vitesseY, width, height, degat);
-        this.degat = degat;
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
+        super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
     }
 
     suivreJoueur(posX, posY){

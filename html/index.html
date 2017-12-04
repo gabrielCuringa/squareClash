@@ -25,8 +25,11 @@
         <canvas id="game" width="600" height="600" ondragover="return false" ondrop="engine.dropHandler(event);"></canvas>
     </div>
     <div id="zoneAttaquant">
-        <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="blue">Blue</li>
-        <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="yellow">Yellow</li>
+        <ul id="listeMonstres">
+            <li id="mana"></li>
+            <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="blue">Blue</li>
+            <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="yellow">Yellow</li>
+        </ul>
     </div>
 </body>
 </html>

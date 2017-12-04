@@ -67,6 +67,8 @@ function Engine() {
 
 
         updateAndDrawParticules(10, ctx);
+        updateMana();
+
         requestAnimationFrame(anime);
 
     }
@@ -87,6 +89,12 @@ function Engine() {
         return new Defenseur(x, y, "rgb(255,255,255)", 0, 0, 70, 30, 100);
     }
 
+    function updateMana() {
+        //console.log(attaquant.mana);
+        document.querySelector("#mana").innerHTML = "Mana : "+attaquant.mana;
+        //console.log(attaquant.mana);
+    }
+
     function creerDeck() {
 
     }
@@ -100,19 +108,24 @@ function Engine() {
 
         var data = event.dataTransfer.getData("monstre");
 
+        console.log(event.dataTransfer.getData("monstre"));
         if(data === "blue"){
             //monstres.push(new Monstre(event.clientX, event.clientY, "rgb('0','0','0')", 0, 0, 20, 20, 4));
             event.preventDefault();
         }else if(data === "yellow"){
-            attaquant.ajouterMonstre(new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20, 4));
+            var yellow = new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20);
+            attaquant.ajouterMonstre(yellow);
+            attaquant.baisserMana(yellow.cout);
             event.preventDefault();
         }
+
+        attaquant.regenererMana();
     }
 
     return{
-        init:init,
-        dropHandler:dropHandler,
-        dragStartHandler,dragStartHandler
+        init,
+        dropHandler,
+        dragStartHandler
     }
 
 }

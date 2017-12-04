@@ -13,3 +13,8 @@
 
     list-style: none;
 }
+
+#listeMonstres li{
+
+    display: inline-block;
+}
