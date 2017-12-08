@@ -59,6 +59,14 @@ class Defenseur extends Player{
     constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, pv){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.pv = pv;
+        this.armeActive = {};
+        this.armes = Defenseur.getArmes();
+    }
+
+    static getArmes(){
+        return {
+            DESTRUCTOR: new Arme(0, 0, "rgb('150','134','253')", 4, 10)
+        };
     }
 
     drawVie(ctx){
@@ -66,8 +74,14 @@ class Defenseur extends Player{
         ctx.fillText(this.pv, this.posX+15, this.posY+50);
     }
 
-    tirer(){
+    setArmeActive(armeSet){
 
+        this.armeActive = armeSet;
+        console.log(this.armeActive);
+    }
+
+    tirer(){
+        this.armeActive.tirer();
     }
 }
 

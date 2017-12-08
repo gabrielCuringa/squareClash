@@ -13,6 +13,15 @@ function Engine() {
 
         attaquant = creerAttaquant();
         defenseur = creerDefenseur();
+        defenseur.setArmeActive(Defenseur.getArmes().DESTRUCTOR);
+
+        window.addEventListener('gamepadconnected', function (event) {
+            //gamepadHandler(navigator.getGamepads());
+        },false);
+
+        window.addEventListener('gamepaddisconnected', function (event) {
+
+        }, false);
 
         window.addEventListener('keydown', function(event){
             if (event.keyCode === 37) {
@@ -54,7 +63,16 @@ function Engine() {
         //attaquant
         defenseur.draw(ctx);
         defenseur.drawVie(ctx);
+        gamepadHandler();
         defenseur.move();
+
+        defenseur.armeActive.draw(ctx);
+        defenseur.armeActive.updatePos(defenseur.posX, defenseur.posY);
+
+        defenseur.armeActive.missiles.forEach(function (missile) {
+           missile.draw(ctx);
+           missile.move();
+        });
 
         attaquant.monstres.forEach(function (monstre) {
             monstre.draw(ctx);
@@ -73,6 +91,13 @@ function Engine() {
 
     }
     
+    function gamepadHandler(gamepads){
+        var pads = navigator.getGamepads();
+        if(pads[0].buttons[0].pressed){
+            defenseur.tirer();
+        }
+    }
+
     function creerAttaquant() {
 
         let x = 250;

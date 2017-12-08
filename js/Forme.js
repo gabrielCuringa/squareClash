@@ -47,10 +47,31 @@ class Forme{
     }
 }
 
-class Arme{
-
-    constructor(posX, posY, degat){
-
+class Missile extends Forme{
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
+        super(posX ,posY, couleur, vitesseX, vitesseY, width, height);
     }
 
+    draw(ctx){
+        ctx.save();
+        ctx.fillStyle = this.couleur;
+        ctx.fillRect(this.posX, this.posY, this.width, this.height);
+        ctx.restore();
+    }
+
+    move(){
+        this.posX += this.vitesseX;
+        this.posY += this.vitesseY;
+    }
+
+    testCollisionEnnemi(ennemis){
+        //console.log('posX : '+this.posX);
+        for(let i=0; i<ennemis.length ; i++){
+            if(!((this.posX >= ennemis[i].posX + ennemis[i].width) || (this.posX + this.width <= ennemis[i].posX) || (this.posY >= ennemis[i].posY + ennemis[i].height) || (this.posY + this.height <= ennemis[i].posY))){
+                ennemis.splice(ennemis.indexOf(ennemis[i]), 1);
+                joueur.incrementerScore();
+                startDoubleExplosion(this.posX, this.posY);
+            }
+        }
+    }
 }
