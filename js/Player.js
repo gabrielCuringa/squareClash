@@ -69,6 +69,8 @@ class Defenseur extends Player{
         //this.armes = Defenseur.getArmes();
         this.armes = [];
         this.setArmeActive(Arme.getArmes()[0]);
+        this.centreX = this.width/2;
+        this.centreY = this.height/2;
         this.angle = 0;
     }
 
@@ -103,9 +105,9 @@ class Defenseur extends Player{
         ctx.translate(this.posX, this.posY);
         ctx.fillStyle = this.couleur;
 
-        ctx.translate(this.width/2, this.width/2);
+        ctx.translate(this.centreX, this.centreY);
         ctx.rotate(this.angle);
-        ctx.translate(-this.width/2, -this.width/2);
+        ctx.translate(-this.centreX, -this.centreY);
         ctx.fillRect(0, 0, this.width, this.height);
 
         ctx.restore();
@@ -113,11 +115,12 @@ class Defenseur extends Player{
 
     tourner(x, y){
 
+        console.log(this.angle);
         this.angle = Math.atan2(x,-y);
     }
 
     tirer(){
-        this.armeActive.tirer();
+        this.armeActive.tirer(this.centreX, this.centreY, this.angle);
     }
 
     collisionArme(armes){

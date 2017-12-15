@@ -10,11 +10,11 @@ class Arme extends Forme{
         this.missiles = [];
     }
 
-    tirer(){
+    tirer(x, y, angle){
         console.log(this.posX);
         if(this.ballesDispo !== 0){
             console.log("balles dispo "+this.ballesDispo);
-            this.missiles.push(new Missile(this.posX, this.posY, this.couleur, 10, 10, 12, 12));
+            this.missiles.push(new Missile(this.couleur, 10, 10, 12, 12, x, y, angle));
             this.ballesDispo -= 1;
             this.jouerSon();
         }else{
@@ -27,9 +27,9 @@ class Arme extends Forme{
 
         ctx.translate(this.posX, this.posY);
         ctx.fillStyle = this.couleur;
-        ctx.translate(defenseur.width/2, defenseur.width/2);
+        ctx.translate(defenseur.centreX, defenseur.centreY);
         ctx.rotate(defenseur.angle);
-        ctx.translate(-defenseur.width/2, -defenseur.width/2);
+        ctx.translate(-defenseur.centreX, -defenseur.centreY);
         ctx.fillRect(0, 0, this.width, this.height);
 
         ctx.restore();

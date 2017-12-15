@@ -64,13 +64,13 @@ function Engine() {
                 defenseur.tirer();
             }
             canShoot = false;
-            console.log("defenseur pos -> "+defenseur.posX+", "+defenseur.posY);
+            //console.log("defenseur pos -> "+defenseur.posX+", "+defenseur.posY);
         });
 
         // Joystick droit
         gamepad.on('hold', 'stick_axis_right', function (event) {
             defenseur.tourner(event.value[0], event.value[1]);
-            console.log(defenseur.posX);
+            //console.log(defenseur.posX);
         });
 
         window.addEventListener('keydown', function(event){
