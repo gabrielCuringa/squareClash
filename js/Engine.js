@@ -106,17 +106,21 @@ function Engine() {
 
         ctx.clearRect(0, 0, width, height);
 
-        //attaquant
+
         defenseur.draw(ctx);
         defenseur.drawVie(ctx);
         setTimeout(function () {
             canShoot = true;
         }, defenseur.getArmeActive().getIntervalleTir());
-
         defenseur.move();
 
         defenseur.armeActive.draw(ctx);
         defenseur.armeActive.updatePos(defenseur.posX, defenseur.posY);
+
+        spawnArme();
+        armesOnPitch.forEach(function (arme) {
+            arme.drawSpawned(ctx);
+        });
 
         defenseur.armeActive.missiles.forEach(function (missile) {
            missile.draw(ctx);
@@ -132,13 +136,10 @@ function Engine() {
             monstre.testCollision();
         });
 
-        spawnArme(ctx);
+        defenseur.collisionArme(armesOnPitch);
+
         updateAndDrawParticules(10, ctx);
         updateMana();
-        armesOnPitch.forEach(function (arme) {
-            arme.drawSpawned(ctx);
-            arme.collisionArmeJoueur(defenseur);
-        });
 
         requestAnimationFrame(anime);
 
@@ -175,11 +176,15 @@ function Engine() {
         
     }
     
-    function spawnArme(ctx) {
+    function spawnArme() {
         var size = Arme.getArmes().length-1;
         if(!armeOnPitch){
-            armesOnPitch.push(Arme.getArmes()[Math.round(Math.random()*size)]);
+            var arme = Arme.getArmes()[Math.round(Math.random()*size)];
+            arme.posX = Math.round(Math.random()*width);
+            arme.posY = Math.round(Math.random()*height);
+            armesOnPitch.push(arme);
         }
+        armeOnPitch = true;
     }
     
     function dropHandler(event) {

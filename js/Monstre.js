@@ -22,9 +22,7 @@ class Monstre extends Forme{
     }
 
     getMonstres(){
-        return{
-            YELLOW: new Yellow(0, 0, "rgb(255,255,122)", 0, 0, 20, 20)
-        }
+        return[new Yellow(0, 0, "rgb(255,255,122)", 0, 0, 20, 20)]
     }
 }
 

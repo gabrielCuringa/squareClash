@@ -66,9 +66,9 @@ class Defenseur extends Player{
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.pv = pv;
         this.armeActive = {};
-        this.setArmeActive(Arme.getArmes()[0]);
         //this.armes = Defenseur.getArmes();
         this.armes = [];
+        this.setArmeActive(Arme.getArmes()[0]);
         this.angle = 0;
     }
 
@@ -84,7 +84,8 @@ class Defenseur extends Player{
 
     setArmeActive(armeSet){
         this.armeActive = armeSet;
-        console.log(this.armeActive);
+        this.armes.push(armeSet);
+        //console.log(this.armeActive);
     }
 
     ramasserArme(arme){
@@ -118,5 +119,22 @@ class Defenseur extends Player{
     tirer(){
         this.armeActive.tirer();
     }
+
+    collisionArme(armes){
+        //console.log(armes);
+        for(let i=0; i<armes.length; i++){
+            if(!((this.posX >= armes[i].posX + armes[i].width) || (this.posX + this.width <= armes[i].posX) || (this.posY >= armes[i].posY + armes[i].height) || (this.posY + this.height <= armes[i].posY))){
+
+                this.ramasserArme(armes[i]);
+                armes.splice(armes.indexOf(armes[i]), 1)
+                //console.log("oiu");
+                var timeout = setTimeout(function () {
+                    armeOnPitch = false;
+                }, 10000);
+            }
+        }
+
+    }
+
 }
 

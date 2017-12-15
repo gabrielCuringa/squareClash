@@ -38,7 +38,7 @@ class Arme extends Forme{
     drawSpawned(ctx){
         ctx.save();
 
-        ctx.translate(width/2, height/2);
+        ctx.translate(this.posX, this.posY);
         ctx.fillStyle = this.couleur;
         ctx.fillRect(0, 0, this.width, this.height);
 
@@ -46,7 +46,7 @@ class Arme extends Forme{
     }
 
     static getArmes(){
-        return [new Arme(0, 0, "rgb(150,134,253)", 4, 10, 500, "../son/destructor.mp3"),
+        return [new Arme(0, 0, "rgb(255, 0, 0)", 4, 10, 500, "../son/destructor.mp3"),
             new Arme(0, 0, "rgb(150,134,253)", 100, 1, 500, "../son/destructor.mp3")
         ];
     }
@@ -68,13 +68,4 @@ class Arme extends Forme{
         var audio = new Audio(this.son);
         audio.play();
     }
-
-    collisionArmeJoueur(joueur){
-
-        if(!((joueur.posX >= this.posX + this.width)|| (joueur.posX + joueur.width <= this.posX)|| (joueur.posY >= this.posY + this.height)||(joueur.posY + joueur.height <= this.posY))){
-            joueur.ramasserArme(this);
-        }
-
-    }
-
 }
