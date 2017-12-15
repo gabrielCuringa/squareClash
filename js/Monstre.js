@@ -20,12 +20,18 @@ class Monstre extends Forme{
     attaquer(){
         defenseur.pv -= this.degat;
     }
+
+    getMonstres(){
+        return{
+            YELLOW: new Yellow(0, 0, "rgb(255,255,122)", 0, 0, 20, 20)
+        }
+    }
 }
 
-class Yellow extends Monstre{
 
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
-        super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
+class Follower extends Monstre{
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
+        super(posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout);
     }
 
     suivreJoueur(posX, posY){
@@ -50,6 +56,12 @@ class Yellow extends Monstre{
         }else{
             this.vitesseY = 0;
         }
+    }
+}
 
+class Yellow extends Follower{
+
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
+        super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
     }
 }

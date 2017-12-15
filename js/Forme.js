@@ -64,7 +64,7 @@ class Missile extends Forme{
         for(let i=0; i<ennemis.length ; i++){
             if(!((this.posX >= ennemis[i].posX + ennemis[i].width) || (this.posX + this.width <= ennemis[i].posX) || (this.posY >= ennemis[i].posY + ennemis[i].height) || (this.posY + this.height <= ennemis[i].posY))){
                 ennemis.splice(ennemis.indexOf(ennemis[i]), 1);
-                joueur.incrementerScore();
+                //joueur.incrementerScore();
                 startDoubleExplosion(this.posX, this.posY);
             }
         }

@@ -20,19 +20,15 @@ class Attaquant{
 
     regenererMana(){
 
-
         let intervalle = null;
         var self = this;
 
         if(this.mana !== 10){
             intervalle = setInterval(function () {
-                if(self.mana !== 10){
-                    self.mana += 1;
+                if(self.mana < 10){
+                    self.incrementerMana();
                 }
-                else
-                    clearInterval(intervalle);
-
-            }, 5000);
+            }, 2500);
         }else{
             console.log("pas regenerer...");
             if(intervalle !== null)
@@ -44,8 +40,18 @@ class Attaquant{
         return this.mana;
     }
 
+    incrementerMana(){
+        this.mana += 1;
+    }
+
     ajouterMonstre(monstre){
-        this.monstres.push(monstre);
+
+        if(monstre.cout > this.mana || this.mana === 0){
+            console.log("mana trop faible");
+        }else{
+            attaquant.baisserMana(monstre.cout);
+            this.monstres.push(monstre);
+        }
     }
 
     attaquer(monstre){
@@ -60,7 +66,7 @@ class Defenseur extends Player{
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.pv = pv;
         this.armeActive = {};
-        this.setArmeActive(Arme.getArmes().DESTRUCTOR);
+        this.setArmeActive(Arme.getArmes()[0]);
         //this.armes = Defenseur.getArmes();
         this.armes = [];
         this.angle = 0;
@@ -77,14 +83,13 @@ class Defenseur extends Player{
     }
 
     setArmeActive(armeSet){
-
         this.armeActive = armeSet;
         console.log(this.armeActive);
     }
 
     ramasserArme(arme){
-        if(this.armes.indexOf(arme) === -1)
-            this.armes.push(arme);
+        this.armes.push(arme);
+        console.log(this.armes);
     }
 
     changerArme(){

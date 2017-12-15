@@ -4,6 +4,9 @@ let padConnected = false;
 let canShoot = true;
 let gamepad = new Gamepad();
 let width,height;
+let cptDropped = 0;
+let armeOnPitch = false;
+let armesOnPitch = [];
 
 function Engine() {
 
@@ -67,28 +70,25 @@ function Engine() {
         // Joystick droit
         gamepad.on('hold', 'stick_axis_right', function (event) {
             defenseur.tourner(event.value[0], event.value[1]);
+            console.log(defenseur.posX);
         });
 
         window.addEventListener('keydown', function(event){
-            if (event.keyCode === 37) {
-
-                defenseur.vitesseX = -5;
-
-            }else if (event.keyCode === 39) {
+            if (event.keyCode === 81) {
 
                 defenseur.vitesseX = 5;
 
-            }else if(event.keyCode === 38){
+            }else if (event.keyCode === 68) {
+
+                defenseur.vitesseX = -5;
+
+            }else if(event.keyCode === 83){
 
                 defenseur.vitesseY = -5;
 
-            }else if(event.keyCode === 40){
+            }else if(event.keyCode === 90){
 
                 defenseur.vitesseY = 5;
-
-            }else if(event.keyCode === 81){//touche q
-
-            }else if(event.keyCode === 68){//touche d
 
             }
         }, false);
@@ -132,9 +132,13 @@ function Engine() {
             monstre.testCollision();
         });
 
-
+        spawnArme(ctx);
         updateAndDrawParticules(10, ctx);
         updateMana();
+        armesOnPitch.forEach(function (arme) {
+            arme.drawSpawned(ctx);
+            arme.collisionArmeJoueur(defenseur);
+        });
 
         requestAnimationFrame(anime);
 
@@ -171,22 +175,30 @@ function Engine() {
         
     }
     
+    function spawnArme(ctx) {
+        var size = Arme.getArmes().length-1;
+        if(!armeOnPitch){
+            armesOnPitch.push(Arme.getArmes()[Math.round(Math.random()*size)]);
+        }
+    }
+    
     function dropHandler(event) {
 
         var data = event.dataTransfer.getData("monstre");
-
         console.log(event.dataTransfer.getData("monstre"));
         if(data === "blue"){
             //monstres.push(new Monstre(event.clientX, event.clientY, "rgb('0','0','0')", 0, 0, 20, 20, 4));
             event.preventDefault();
         }else if(data === "yellow"){
-            var yellow = new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20);
+            //var yellow = new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20);
+            //ne pas oublier de setter la posX et Y avec event.client
             attaquant.ajouterMonstre(yellow);
-            attaquant.baisserMana(yellow.cout);
             event.preventDefault();
         }
-
-        attaquant.regenererMana();
+        if(cptDropped === 0){
+            attaquant.regenererMana();
+            cptDropped += 1;
+        }
     }
 
     return{

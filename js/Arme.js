@@ -31,15 +31,24 @@ class Arme extends Forme{
         ctx.rotate(defenseur.angle);
         ctx.translate(-defenseur.width/2, -defenseur.width/2);
         ctx.fillRect(0, 0, this.width, this.height);
+
         ctx.restore();
     }
 
+    drawSpawned(ctx){
+        ctx.save();
+
+        ctx.translate(width/2, height/2);
+        ctx.fillStyle = this.couleur;
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        ctx.restore();
+    }
 
     static getArmes(){
-        return {
-            DESTRUCTOR: new Arme(0, 0, "rgb(150,134,253)", 4, 10, 500, "../son/destructor.mp3"),
-            BUFFATOMIQUE: new Arme(0, 0, "rgb(150,134,253)", 100, 1, 500, "../son/destructor.mp3")
-        };
+        return [new Arme(0, 0, "rgb(150,134,253)", 4, 10, 500, "../son/destructor.mp3"),
+            new Arme(0, 0, "rgb(150,134,253)", 100, 1, 500, "../son/destructor.mp3")
+        ];
     }
 
     getIntervalleTir(){
@@ -58,6 +67,14 @@ class Arme extends Forme{
     jouerSon(){
         var audio = new Audio(this.son);
         audio.play();
+    }
+
+    collisionArmeJoueur(joueur){
+
+        if(!((joueur.posX >= this.posX + this.width)|| (joueur.posX + joueur.width <= this.posX)|| (joueur.posY >= this.posY + this.height)||(joueur.posY + joueur.height <= this.posY))){
+            joueur.ramasserArme(this);
+        }
+
     }
 
 }
