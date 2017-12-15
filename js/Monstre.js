@@ -31,7 +31,7 @@ class Yellow extends Monstre{
     suivreJoueur(posX, posY){
 
         //console.log(posX+","+posY);
-        if(this.posX != posX){
+        if(this.posX !== posX){
             if(this.posX > posX){
                 this.vitesseX = -1;
             }else if(this.posX < posX){
@@ -41,7 +41,7 @@ class Yellow extends Monstre{
             this.vitesseX = 0;
         }
 
-        if(this.posY != posY){
+        if(this.posY !== posY){
             if(this.posY > posY){
                 this.vitesseY = -1;
             }else if(this.posY < posY){

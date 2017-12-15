@@ -37,8 +37,8 @@ class Arme extends Forme{
 
     static getArmes(){
         return {
-            DESTRUCTOR: new Arme(0, 0, "rgb('150','134','253')", 4, 10, 500, "../son/destructor.mp3"),
-            BUFFATOMIQUE: new Arme(0, 0, "rgb('150','134','253')", 100, 1, 500, "../son/destructor.mp3")
+            DESTRUCTOR: new Arme(0, 0, "rgb(150,134,253)", 4, 10, 500, "../son/destructor.mp3"),
+            BUFFATOMIQUE: new Arme(0, 0, "rgb(150,134,253)", 100, 1, 500, "../son/destructor.mp3")
         };
     }
 

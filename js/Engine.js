@@ -153,7 +153,7 @@ function Engine() {
         let x = 250;
         let y = 250;
 
-        return new Defenseur(x, y, "rgb(255,255,255)", 0, 0, 70, 30, 100);
+        return new Defenseur(x, y, "rgb(125,125,125)", 0, 0, 70, 30, 100);
     }
 
     function updateMana() {
