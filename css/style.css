@@ -4,9 +4,31 @@
     float: left;
 }
 
-#zoneJeu{
-    width: 100%;
-    display: inline-block;
+#menu{
+    display: block;
+    background: #549aef;
+    margin: auto;
+    width: 600px;
+    height: 600px;
+}
+#menu h1{
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+}
+
+#menu a{
+    display: block;
+    text-align: center;
+    background: #95ff84;
+    text-decoration: none;
+    font-size: x-large;
+    font-family: Helvetica, sans-serif;
+}
+
+#menu a:hover{
+
+    box-shadow: 1px 1px 12px #555;;
+
 }
 
 #zoneAttaquant li{

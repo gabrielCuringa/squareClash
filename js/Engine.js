@@ -1,9 +1,13 @@
 let attaquant, defenseur;
 let particles = [];
+let padConnected = false;
+let canShoot = true;
+let gamepad = new Gamepad();
+let width,height;
 
 function Engine() {
 
-    let canvas, ctx, width, height;
+    let canvas, ctx;
 
     function init() {
         canvas = document.querySelector("#game");
@@ -13,15 +17,57 @@ function Engine() {
 
         attaquant = creerAttaquant();
         defenseur = creerDefenseur();
-        defenseur.setArmeActive(Defenseur.getArmes().DESTRUCTOR);
 
-        window.addEventListener('gamepadconnected', function (event) {
-            //gamepadHandler(navigator.getGamepads());
-        },false);
+        gamepad.on('connect', function (event) {
+            padConnected = true;
+        });
 
-        window.addEventListener('gamepaddisconnected', function (event) {
+        gamepad.on('hold', 'd_pad_up',function (event) {
+            defenseur.vitesseY = -5;
+        });
 
-        }, false);
+        gamepad.on('hold', 'd_pad_down',function (event) {
+            defenseur.vitesseY = 5;
+        });
+
+        gamepad.on('hold', 'd_pad_left',function (event) {
+            defenseur.vitesseX = -5;
+        });
+
+        gamepad.on('hold', 'd_pad_right',function (event) {
+            defenseur.vitesseX = 5;
+        });
+
+        gamepad.on('release', 'd_pad_up',function (event) {
+            defenseur.vitesseY = 0;
+        });
+
+        gamepad.on('release', 'd_pad_down',function (event) {
+            defenseur.vitesseY = 0;
+        });
+
+        gamepad.on('release', 'd_pad_left',function (event) {
+            defenseur.vitesseX = 0;
+        });
+
+        gamepad.on('release', 'd_pad_right',function (event) {
+            defenseur.vitesseX = 0;
+        });
+
+        // PS4 : X et XBOX : A
+        gamepad.on('press', 'shoulder_bottom_right',function (event) {
+
+            if(canShoot){
+                defenseur.tirer();
+            }
+            canShoot = false;
+            console.log("defenseur pos -> "+defenseur.posX+", "+defenseur.posY);
+        });
+
+        // Joystick droit
+        gamepad.on('hold', 'stick_axis_right', function (event) {
+            defenseur.tourner(event.value[0], event.value[1]);
+        });
 
         window.addEventListener('keydown', function(event){
             if (event.keyCode === 37) {
@@ -63,7 +109,10 @@ function Engine() {
         //attaquant
         defenseur.draw(ctx);
         defenseur.drawVie(ctx);
-        gamepadHandler();
+        setTimeout(function () {
+            canShoot = true;
+        }, defenseur.getArmeActive().getIntervalleTir());
+
         defenseur.move();
 
         defenseur.armeActive.draw(ctx);
@@ -89,13 +138,6 @@ function Engine() {
 
         requestAnimationFrame(anime);
 
-    }
-    
-    function gamepadHandler(gamepads){
-        var pads = navigator.getGamepads();
-        if(pads[0].buttons[0].pressed){
-            defenseur.tirer();
-        }
     }
 
     function creerAttaquant() {

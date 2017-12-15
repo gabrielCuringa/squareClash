@@ -60,24 +60,54 @@ class Defenseur extends Player{
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.pv = pv;
         this.armeActive = {};
-        this.armes = Defenseur.getArmes();
+        this.setArmeActive(Arme.getArmes().DESTRUCTOR);
+        //this.armes = Defenseur.getArmes();
+        this.armes = [];
+        this.angle = 0;
     }
 
-    static getArmes(){
-        return {
-            DESTRUCTOR: new Arme(0, 0, "rgb('150','134','253')", 4, 10)
-        };
-    }
 
     drawVie(ctx){
         ctx.font = 'bold 16pt Helvetica';
         ctx.fillText(this.pv, this.posX+15, this.posY+50);
     }
 
+    getArmeActive(){
+        return this.armeActive;
+    }
+
     setArmeActive(armeSet){
 
         this.armeActive = armeSet;
         console.log(this.armeActive);
+    }
+
+    ramasserArme(arme){
+        if(this.armes.indexOf(arme) === -1)
+            this.armes.push(arme);
+    }
+
+    changerArme(){
+
+    }
+
+    draw(ctx){
+        ctx.save();
+
+        ctx.translate(this.posX, this.posY);
+        ctx.fillStyle = this.couleur;
+
+        ctx.translate(this.width/2, this.width/2);
+        ctx.rotate(this.angle);
+        ctx.translate(-this.width/2, -this.width/2);
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        ctx.restore();
+    }
+
+    tourner(x, y){
+
+        this.angle = Math.atan2(x,-y);
     }
 
     tirer(){
