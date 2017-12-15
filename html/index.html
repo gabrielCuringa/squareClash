@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/Particle.js"></script>
+    <script src="../js/Forme.js"></script>
+    <script src="../js/Arme.js"></script>
+    <script src="../js/Player.js"></script>
+    <script src="../js/Monstre.js"></script>
+    <script src="../js/Engine.js"></script>
+    <script src="../js/start.js"></script>
     <title>Square Clash</title>
 </head>
 <body>
@@ -15,9 +22,18 @@
             <li>Yellow : Lent, peu de dégâts, se dirige vers le défenseur</li>
         </ul>
     </div>-->
-    <div id="menu">
-        <h1>Square clash</h1>
-        <a href="game.html">Lancer le jeu</a>
+    <div>
+
+    </div>
+    <div id="zoneJeu">
+        <canvas id="game" width="600" height="600" ondragover="return false" ondrop="engine.dropHandler(event);"></canvas>
+    </div>
+    <div id="zoneAttaquant">
+        <ul id="listeMonstres">
+            <li id="mana"></li>
+            <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="blue">Blue</li>
+            <li draggable="true" ondragstart="engine.dragStartHandler(event);" data-value="yellow">Yellow</li>
+        </ul>
     </div>
 </body>
 </html>
