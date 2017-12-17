@@ -12,6 +12,7 @@ class Attaquant{
     constructor(){
         this.mana = 10;
         this.monstres = [];
+        this.zoneDraggable = [width/2, height];
     }
 
     baisserMana(perte){
@@ -54,6 +55,19 @@ class Attaquant{
         }
     }
 
+    drawZoneNonDraggable(ctx) {
+        ctx.save();
+        ctx.fillStyle = "rgb(125,125,125)";
+        ctx.globalAlpha = 0.2;
+        //console.log(this.zoneDraggable[0]);
+        ctx.fillRect(0, 0, this.zoneDraggable[0], this.zoneDraggable[1]);
+        ctx.restore();
+    }
+
+    iCanDrag(x, y){
+        return !((x > this.zoneDraggable[0]) || (y > this.zoneDraggable[1]));
+    }
+
     attaquer(monstre){
 
     }
@@ -72,12 +86,16 @@ class Defenseur extends Player{
         this.centreX = this.width/2;
         this.centreY = this.height/2;
         this.angle = 0;
+        this.indexArmeActive = 0;
+        this.base = new Base(1100, 150, "rgb(141, 200, 175)", 100, 300);
     }
 
 
     drawVie(ctx){
+        ctx.save();
         ctx.font = 'bold 16pt Helvetica';
         ctx.fillText(this.pv, this.posX+15, this.posY+50);
+        ctx.restore();
     }
 
     getArmeActive(){
@@ -87,16 +105,38 @@ class Defenseur extends Player{
     setArmeActive(armeSet){
         this.armeActive = armeSet;
         this.armes.push(armeSet);
+        this.indexArmeActive +=1;
         //console.log(this.armeActive);
     }
 
     ramasserArme(arme){
-        this.armes.push(arme);
+
+        var checked = this.check(arme);
+        if(checked === -1){
+            this.armes.push(arme);
+        }else{
+            checked.recharger();
+            console.log(checked.ballesDispo);
+        }
         console.log(this.armes);
     }
 
     changerArme(){
 
+        if(this.indexArmeActive === this.armes.length)
+            this.indexArmeActive = 0;
+
+        this.armeActive = this.armes[this.indexArmeActive];
+        this.indexArmeActive +=1;
+    }
+
+    check(arme){
+        for(let i=0; i<this.armes.length ; i++){
+            if(this.armes[i].name === arme.name){
+                return this.armes[i];
+            }
+        }
+        return -1;
     }
 
     draw(ctx){
@@ -114,13 +154,12 @@ class Defenseur extends Player{
     }
 
     tourner(x, y){
-
-        console.log(this.angle);
         this.angle = Math.atan2(x,-y);
     }
 
     tirer(){
-        this.armeActive.tirer(this.centreX, this.centreY, this.angle);
+        this.armeActive.tirer(this.posX, this.posY, this.angle);
+        console.log(this.armeActive.posX);
     }
 
     collisionArme(armes){

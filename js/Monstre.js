@@ -6,19 +6,18 @@ class Monstre extends Forme{
         this.cout = cout;
     }
 
-    testCollision(){
+    testCollision(touche){
         //console.log('posX : '+this.posX);
-        if(!((this.posX >= defenseur.posX + defenseur.width) || (this.posX + this.width <= defenseur.posX) || (this.posY >= defenseur.posY + defenseur.height) || (this.posY + this.height <= defenseur.posY))){
+        if(!((this.posX >= touche.posX + touche.width) || (this.posX + this.width <= touche.posX) || (this.posY >= touche.posY + touche.height) || (this.posY + this.height <= touche.posY))){
             //console.log("vrai");
             attaquant.monstres.splice(attaquant.monstres.indexOf(this), 1);
-
-            this.attaquer();
+            this.attaquer(touche);
             startDoubleExplosion(this.posX, this.posY);
         }
     }
 
-    attaquer(){
-        defenseur.pv -= this.degat;
+    attaquer(touche){
+        touche.pv -= this.degat;
     }
 
     getMonstres(){
@@ -32,7 +31,7 @@ class Follower extends Monstre{
         super(posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout);
     }
 
-    suivreJoueur(posX, posY){
+    suivre(posX, posY){
 
         //console.log(posX+","+posY);
         if(this.posX !== posX){
@@ -59,6 +58,12 @@ class Follower extends Monstre{
 
 class Yellow extends Follower{
 
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
+        super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
+    }
+}
+
+class Blue extends Follower{
     constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
     }

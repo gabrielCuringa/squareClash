@@ -43,8 +43,9 @@ class Forme{
 }
 
 class Missile extends Forme{
-    constructor(couleur, vitesseX, vitesseY, width, height, defenseurCentreX, defenseurCentreY, angle){
-        super(defenseurCentreX + Math.sin(angle) - Math.cos(angle), defenseurCentreY - Math.cos(angle) - Math.sin(angle), couleur, defenseur.vitesseX+Math.sin(angle)*10, defenseur.vitesseY-Math.cos(angle)*10, width, height);
+    constructor(couleur, defPosX, defPosY, width, height, vitesseX, vitesseY, angle){
+        super(defPosX+Math.sin(angle) - Math.cos(angle), defPosY - Math.cos(angle) - Math.sin(angle), couleur, vitesseX+Math.sin(angle)*10, vitesseY-Math.cos(angle)*10, width, height);
+
         this.angle = angle;
     }
 
@@ -53,7 +54,6 @@ class Missile extends Forme{
         ctx.fillStyle = this.couleur;
         ctx.translate(this.posX, this.posY);
         ctx.rotate(this.angle);
-
         ctx.fillRect(0, 0, this.width, this.height);
         ctx.restore();
     }

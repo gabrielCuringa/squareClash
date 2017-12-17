@@ -53,6 +53,12 @@ function Particle ()
 
         ctx.restore();
     };
+
+    this.testeCollisionZone = function(w, h) {
+        if(((this.posX+this.width) >  w) || (this.posX < 0) || ((this.posY+this.height) >  h) || (this.posY < 0)) {
+            return true;
+        }
+    }
 }
 
 /*

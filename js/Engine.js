@@ -7,6 +7,7 @@ let width,height;
 let cptDropped = 0;
 let armeOnPitch = false;
 let armesOnPitch = [];
+let showZoneNonDraggable = false;
 
 function Engine() {
 
@@ -64,7 +65,13 @@ function Engine() {
                 defenseur.tirer();
             }
             canShoot = false;
+            console.log(defenseur.armes);
             //console.log("defenseur pos -> "+defenseur.posX+", "+defenseur.posY);
+        });
+
+        gamepad.on('press', 'shoulder_top_right', function (event) {
+            console.log(event.button);
+            defenseur.changerArme(event.button);
         });
 
         // Joystick droit
@@ -114,6 +121,9 @@ function Engine() {
         }, defenseur.getArmeActive().getIntervalleTir());
         defenseur.move();
 
+        defenseur.base.draw(ctx);
+        defenseur.base.drawVie(ctx);
+
         defenseur.armeActive.draw(ctx);
         defenseur.armeActive.updatePos(defenseur.posX, defenseur.posY);
 
@@ -125,18 +135,32 @@ function Engine() {
         defenseur.armeActive.missiles.forEach(function (missile) {
            missile.draw(ctx);
            missile.move();
+           missile.testCollisionEnnemi(attaquant.monstres);
         });
 
         attaquant.monstres.forEach(function (monstre) {
             monstre.draw(ctx);
-            if(monstre instanceof Yellow){
-                monstre.suivreJoueur(defenseur.posX, defenseur.posY);
-            }
             monstre.move();
-            monstre.testCollision();
+            if(monstre instanceof Yellow){
+                monstre.suivre(defenseur.posX, defenseur.posY);
+                monstre.testCollision(defenseur);
+            }else if(monstre instanceof Blue){
+                monstre.suivre(defenseur.base.posX, defenseur.base.posY);
+                monstre.testCollision(defenseur.base);
+            }
+
+        });
+
+        particles.forEach(function (particle) {
+            if(particle.testeCollisionZone(width, height)){
+                particles.splice(particles.indexOf(particle), 1);
+            }
         });
 
         defenseur.collisionArme(armesOnPitch);
+
+        if(showZoneNonDraggable)
+            attaquant.drawZoneNonDraggable(ctx);
 
         updateAndDrawParticules(10, ctx);
         updateMana();
@@ -150,7 +174,7 @@ function Engine() {
         let x = 250;
         let y = 250;
 
-        return new Attaquant(x, y, "rgb('255','255','255')", 0, 0, 70, 30);
+        return new Attaquant();
     }
 
     function creerDefenseur() {
@@ -173,7 +197,8 @@ function Engine() {
     
     function dragStartHandler(event) {
         event.dataTransfer.setData("monstre", event.target.dataset.value);
-        
+        console.log("start drag");
+        showZoneNonDraggable = true;
     }
     
     function spawnArme() {
@@ -189,20 +214,27 @@ function Engine() {
     
     function dropHandler(event) {
 
+        showZoneNonDraggable = false;
         var data = event.dataTransfer.getData("monstre");
         console.log(event.dataTransfer.getData("monstre"));
-        if(data === "blue"){
-            //monstres.push(new Monstre(event.clientX, event.clientY, "rgb('0','0','0')", 0, 0, 20, 20, 4));
-            event.preventDefault();
-        }else if(data === "yellow"){
-            //var yellow = new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20);
-            //ne pas oublier de setter la posX et Y avec event.client
-            attaquant.ajouterMonstre(yellow);
-            event.preventDefault();
-        }
-        if(cptDropped === 0){
-            attaquant.regenererMana();
-            cptDropped += 1;
+
+        if(attaquant.iCanDrag(event.clientX, event.clientY)){
+            if(data === "blue"){
+                var blue = new Blue(event.clientX, event.clientY, "rgb(0, 0, 255)", 0, 0, 40, 40);
+                attaquant.ajouterMonstre(blue);
+                event.preventDefault();
+            }else if(data === "yellow"){
+                var yellow = new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20);
+                //ne pas oublier de setter la posX et Y avec event.client
+                attaquant.ajouterMonstre(yellow);
+                event.preventDefault();
+            }
+            if(cptDropped === 0){
+                attaquant.regenererMana();
+                cptDropped += 1;
+            }
+        }else{
+            console.log("zone de dépôt de monstre dépassé");
         }
     }
 
