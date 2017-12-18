@@ -28,16 +28,31 @@ class Forme{
         this.vitesseX = -this.vitesseX;
     }
 
+    stopX(){
+        this.posX = 0;
+    }
+
+    stopY(){
+        this.posY = 0;
+    }
+
     inverseSensDeplacementY() {
         this.vitesseY = -this.vitesseY;
     }
 
     testeCollisionZone(w, h) {
-        if(((this.posX+this.width) >  w) || (this.posX < 0)) {
-            this.inverseSensDeplacementX();
+        if(((this.posX+this.width) >  w)) {
+            //this.inverseSensDeplacementX();
+            this.posX = w-this.width;
+
+        }else if(this.posX <= 0){
+            this.stopX();
         }
-        if(((this.posY+this.height) >  h) || (this.posY < 0)) {
-            this.inverseSensDeplacementY();
+
+        if(((this.posY+this.height) >  h)) {
+            this.posY = h-this.height;
+        }else if(this.posY < 0){
+            this.stopY();
         }
     }
 }

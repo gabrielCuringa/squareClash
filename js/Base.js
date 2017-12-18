@@ -11,6 +11,7 @@ class Base extends Forme{
 
     drawVie(ctx){
         ctx.font = 'bold 16pt Helvetica';
-        ctx.fillText("Pv : "+this.pv, this.posX-15, this.posY-50);
+        ctx.textAlign = 'center';
+        ctx.fillText("Pv : "+this.pv, this.posX+50, this.posY-5);
     }
 }

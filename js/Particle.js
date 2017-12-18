@@ -134,11 +134,11 @@ function removeFromArray(array, object) {
     return array;
 }
 
-function startDoubleExplosion(x, y) {
-    createExplosion(x, y, "#525252");
+function startDoubleExplosion(x, y, color) {
+    createExplosion(x, y, color);
     // On peut multiplier la densité en générant plusieurs
     // explositons de couleurs différentes...
-    createExplosion(x, y, "#FFA318");
+    createExplosion(x, y, color);
     //createExplosion(x, y, "green");
     //sound.play('blast');
 }

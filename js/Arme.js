@@ -26,7 +26,7 @@ class Arme extends Forme{
     draw(ctx){
         ctx.save();
 
-        ctx.translate(this.posX, this.posY);
+        ctx.translate(this.posX+15, this.posY-10);
         ctx.fillStyle = this.couleur;
         ctx.translate(defenseur.centreX, defenseur.centreY);
         ctx.rotate(defenseur.angle);

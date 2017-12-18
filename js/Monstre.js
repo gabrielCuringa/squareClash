@@ -14,7 +14,7 @@ class Monstre extends Forme{
             attaquant.monstres.splice(attaquant.monstres.indexOf(this), 1);
             this.attaquer(touche);
             if(this.degat <= 10)
-                startDoubleExplosion(this.posX, this.posY);
+                startDoubleExplosion(this.posX, this.posY, this.couleur);
             else if(this.degat > 10)
                 startBigExplosion(this.posX, this.posY);
         }
@@ -25,9 +25,9 @@ class Monstre extends Forme{
     }
 
     static getMonstres(){
-        return[new Follower("BLUE" ,0, 0, "rgb(0, 0, 255)", 0, 0, 40, 40, 8, 2),
-            new Follower("YELLOW", 0, 0, "rgb(255,255,122)", 0, 0, 20, 20, 8, 2),
-            new Follower("BLACK" ,0, 0, "rgb(0,0,0)", 0, 0, 80, 80, 100, 9)
+        return[new Follower("BLUE" ,0, 0, "rgb(0, 0, 255)", 2, 2, 40, 40, 8, 2),
+            new Follower("YELLOW", 0, 0, "rgb(255,255,122)", 2, 2, 20, 20, 8, 2),
+            new Follower("BLACK" ,0, 0, "rgb(0,0,0)", 0.5, 0.5, 80, 80, 100, 9)
         ];
     }
 
@@ -41,29 +41,20 @@ class Monstre extends Forme{
 class Follower extends Monstre{
     constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
         super(name, posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout);
+        this.angle = 0;
     }
 
     suivre(posX, posY){
+        
+        this.angle = this.calculerAngle(posX, posY);
+        if (posX < this.posX) this.angle += Math.PI;
 
-        //console.log(posX+","+posY);
-        if(this.posX !== posX){
-            if(this.posX > posX){
-                this.vitesseX = -1;
-            }else if(this.posX < posX){
-                this.vitesseX = 1;
-            }
-        }else {
-            this.vitesseX = 0;
-        }
+        this.posX += Math.cos(this.angle) * this.vitesseX;
+        this.posY += Math.sin(this.angle) * this.vitesseY;
+        //console.log(this.angle);
+    }
 
-        if(this.posY !== posY){
-            if(this.posY > posY){
-                this.vitesseY = -1;
-            }else if(this.posY < posY){
-                this.vitesseY = 1;
-            }
-        }else{
-            this.vitesseY = 0;
-        }
+    calculerAngle(posX, posY){
+        return  Math.atan((this.posY - posY)/(this.posX - posX));
     }
 }

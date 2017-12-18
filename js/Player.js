@@ -26,6 +26,8 @@ class Attaquant{
 
         if(this.mana !== 10){
             intervalle = setInterval(function () {
+                if(pauseState)
+                    return;
                 if(self.mana < 10){
                     self.incrementerMana();
                 }

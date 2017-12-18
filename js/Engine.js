@@ -8,6 +8,9 @@ let cptDropped = 0;
 let armeOnPitch = false;
 let armesOnPitch = [];
 let showZoneNonDraggable = false;
+let pauseState = false;
+let background = new Image();
+const SRC = "../img/squareClashTitle.jpg";
 
 function Engine() {
 
@@ -18,6 +21,7 @@ function Engine() {
         ctx = canvas.getContext('2d');
         width = canvas.width;
         height = canvas.height;
+        background.src = SRC;
 
         attaquant = creerAttaquant();
         creerDeck();
@@ -59,6 +63,13 @@ function Engine() {
             defenseur.vitesseX = 0;
         });
 
+        gamepad.on('press', 'start', function (event) {
+            if(!pauseState)
+                pauseState = true;
+            else
+                pauseState = false;
+        });
+
         // PS4 : X et XBOX : A
         gamepad.on('press', 'shoulder_bottom_right',function (event) {
 
@@ -97,7 +108,9 @@ function Engine() {
             }else if(event.keyCode === 90){
 
                 defenseur.vitesseY = 5;
-
+            }else if(event.keyCode === 80){
+                // touche P
+                pauseState = !pauseState;
             }
         }, false);
 
@@ -114,62 +127,80 @@ function Engine() {
 
         ctx.clearRect(0, 0, width, height);
 
+        if(pauseState){
+            jeuPause();
+        }else{
+            defenseur.draw(ctx);
+            defenseur.drawVie(ctx);
+            defenseur.testeCollisionZone(width, height);
 
-        defenseur.draw(ctx);
-        defenseur.drawVie(ctx);
-        setTimeout(function () {
-            canShoot = true;
-        }, defenseur.getArmeActive().getIntervalleTir());
-        defenseur.move();
+            setTimeout(function () {
+                canShoot = true;
+            }, defenseur.getArmeActive().getIntervalleTir());
+            defenseur.move();
 
-        defenseur.base.draw(ctx);
-        defenseur.base.drawVie(ctx);
+            defenseur.base.draw(ctx);
+            defenseur.base.drawVie(ctx);
 
-        defenseur.armeActive.draw(ctx);
-        defenseur.armeActive.updatePos(defenseur.posX, defenseur.posY);
+            defenseur.armeActive.draw(ctx);
+            defenseur.armeActive.updatePos(defenseur.posX, defenseur.posY);
 
-        spawnArme();
-        armesOnPitch.forEach(function (arme) {
-            arme.drawSpawned(ctx);
-        });
+            spawnArme();
+            armesOnPitch.forEach(function (arme) {
+                arme.drawSpawned(ctx);
+            });
 
-        defenseur.armeActive.missiles.forEach(function (missile) {
-           missile.draw(ctx);
-           missile.move();
-           missile.testCollisionEnnemi(attaquant.monstres);
-        });
+            defenseur.armeActive.missiles.forEach(function (missile) {
+                missile.draw(ctx);
+                missile.move();
+                missile.testCollisionEnnemi(attaquant.monstres);
+            });
 
-        attaquant.monstres.forEach(function (monstre) {
-            monstre.draw(ctx);
-            monstre.move();
-            if(monstre.name === "YELLOW"){
-                monstre.suivre(defenseur.posX, defenseur.posY);
-                monstre.testCollision(defenseur);
-            }else if((monstre.name === "BLACK") || (monstre.name === "BLUE")){
-                monstre.suivre(defenseur.base.posX, defenseur.base.posY);
-                monstre.testCollision(defenseur.base);
-            }
+            attaquant.monstres.forEach(function (monstre) {
+                monstre.draw(ctx);
+                //monstre.move();
+                monstre.testeCollisionZone(width, height);
+                if(monstre.name === "YELLOW"){
+                    monstre.suivre(defenseur.posX, defenseur.posY);
+                    monstre.testCollision(defenseur);
+                }else if((monstre.name === "BLACK") || (monstre.name === "BLUE")){
+                    monstre.suivre(defenseur.base.posX, defenseur.base.posY);
+                    monstre.testCollision(defenseur.base);
+                }
 
-        });
+            });
 
-        particles.forEach(function (particle) {
-            if(particle.testeCollisionZone(width, height)){
-                particles.splice(particles.indexOf(particle), 1);
-            }
-        });
+            particles.forEach(function (particle) {
+                if(particle.testeCollisionZone(width, height)){
+                    particles.splice(particles.indexOf(particle), 1);
+                }
+            });
 
-        defenseur.collisionArme(armesOnPitch);
+            defenseur.collisionArme(armesOnPitch);
 
-        if(showZoneNonDraggable)
-            attaquant.drawZoneNonDraggable(ctx);
+            if(showZoneNonDraggable)
+                attaquant.drawZoneNonDraggable(ctx);
 
-        updateAndDrawParticules(10, ctx);
-        updateMana();
+            updateAndDrawParticules(10, ctx);
+            updateMana();
 
-        checkFin();
+            checkFin();
+        }
 
         requestAnimationFrame(anime);
 
+    }
+
+    
+    function jeuPause() {
+        ctx.save();
+
+        ctx.drawImage(background, 0, 0, width, height);
+
+        ctx.fillStyle = 'bold 16pt Helvetica';
+        ctx.fillText("PAUSE", width/2, height/2);
+
+        ctx.restore();
     }
 
     function creerAttaquant() {
