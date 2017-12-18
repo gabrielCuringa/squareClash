@@ -2,7 +2,7 @@ class Base extends Forme{
 
     constructor(posX ,posY, couleur, width, height){
         super(posX, posY, couleur, 0, 0, width, height);
-        this.pv = 1000;
+        this.pv = 200;
     }
 
     baisserPv(degat){

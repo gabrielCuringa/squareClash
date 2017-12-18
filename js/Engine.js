@@ -20,6 +20,7 @@ function Engine() {
         height = canvas.height;
 
         attaquant = creerAttaquant();
+        creerDeck();
         defenseur = creerDefenseur();
 
         gamepad.on('connect', function (event) {
@@ -141,10 +142,10 @@ function Engine() {
         attaquant.monstres.forEach(function (monstre) {
             monstre.draw(ctx);
             monstre.move();
-            if(monstre instanceof Yellow){
+            if(monstre.name === "YELLOW"){
                 monstre.suivre(defenseur.posX, defenseur.posY);
                 monstre.testCollision(defenseur);
-            }else if(monstre instanceof Blue){
+            }else if((monstre.name === "BLACK") || (monstre.name === "BLUE")){
                 monstre.suivre(defenseur.base.posX, defenseur.base.posY);
                 monstre.testCollision(defenseur.base);
             }
@@ -164,6 +165,8 @@ function Engine() {
 
         updateAndDrawParticules(10, ctx);
         updateMana();
+
+        checkFin();
 
         requestAnimationFrame(anime);
 
@@ -186,13 +189,36 @@ function Engine() {
     }
 
     function updateMana() {
-        //console.log(attaquant.mana);
-        document.querySelector("#mana").innerHTML = "Mana : "+attaquant.mana;
-        //console.log(attaquant.mana);
+        //document.querySelector("#mana").parentNode.innerHTML = "Mana : "+attaquant.mana;
+        document.querySelector("#mana").value = attaquant.mana;
     }
 
     function creerDeck() {
+        var zoneAttaquant = document.querySelector("#zoneAttaquant");
+        var ul = document.createElement("ul");
+        ul.id = "listeMonstres";
 
+        var liMana = document.createElement("li");
+        liMana.innerHTML = "";
+        var progressMana = document.createElement("meter");
+        progressMana.id = "mana";
+        progressMana.value = attaquant.mana;
+        progressMana.max = attaquant.mana;
+        progressMana.min = 0;
+
+        liMana.appendChild(progressMana);
+        ul.appendChild(liMana);
+
+        for(let i=0; i<Monstre.getMonstres().length; i++){
+            var li = document.createElement("li");
+            li.setAttribute("draggable", "true");
+            li.setAttribute("ondragstart", "engine.dragStartHandler(event);");
+            li.setAttribute("data-value", Monstre.getMonstres()[i].name);
+            li.innerHTML = Monstre.getMonstres()[i].name;
+            ul.appendChild(li);
+        }
+
+        zoneAttaquant.appendChild(ul);
     }
     
     function dragStartHandler(event) {
@@ -216,25 +242,34 @@ function Engine() {
 
         showZoneNonDraggable = false;
         var data = event.dataTransfer.getData("monstre");
-        console.log(event.dataTransfer.getData("monstre"));
 
         if(attaquant.iCanDrag(event.clientX, event.clientY)){
-            if(data === "blue"){
-                var blue = new Blue(event.clientX, event.clientY, "rgb(0, 0, 255)", 0, 0, 40, 40);
-                attaquant.ajouterMonstre(blue);
-                event.preventDefault();
-            }else if(data === "yellow"){
-                var yellow = new Yellow(event.clientX, event.clientY, "rgb(255,255,122)", 0, 0, 20, 20);
+            if(data === "BLUE"){
+                index = 0;
+            }else if(data === "YELLOW"){
                 //ne pas oublier de setter la posX et Y avec event.client
-                attaquant.ajouterMonstre(yellow);
-                event.preventDefault();
+                index = 1;
+            }else if(data === "BLACK"){
+                index = 2;
             }
+            attaquant.ajouterMonstre(Monstre.getMonstres()[index], event.clientX, event.clientY);
+
             if(cptDropped === 0){
                 attaquant.regenererMana();
                 cptDropped += 1;
             }
         }else{
             console.log("zone de dépôt de monstre dépassé");
+        }
+    }
+
+    function lancerFinJeu() {
+        //console.log("fin");
+    }
+
+    function checkFin() {
+        if(defenseur.pv <= 0 || defenseur.base.pv <= 0){
+            lancerFinJeu();
         }
     }
 

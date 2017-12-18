@@ -141,7 +141,20 @@ function startDoubleExplosion(x, y) {
     createExplosion(x, y, "#FFA318");
     //createExplosion(x, y, "green");
     //sound.play('blast');
+}
 
+function startBigExplosion(x, y) {
+    createExplosion(x, y, "#525252");
+    // On peut multiplier la densité en générant plusieurs
+    // explositons de couleurs différentes...
+    createExplosion(x, y, "#FFA318");
+    createExplosion(x, y, "#a9e7ff");
+    createExplosion(x, y, "#ff1717");
+    createExplosion(x, y, "#65ff53");
+    createExplosion(x, y, "#000000");
+
+    //createExplosion(x, y, "green");
+    //sound.play('blast');
 }
 
 function randomFloat (min, max)

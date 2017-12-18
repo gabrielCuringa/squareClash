@@ -45,12 +45,14 @@ class Attaquant{
         this.mana += 1;
     }
 
-    ajouterMonstre(monstre){
+    ajouterMonstre(monstre, x, y){
+
+        monstre.setPositions(x, y);
 
         if(monstre.cout > this.mana || this.mana === 0){
             console.log("mana trop faible");
         }else{
-            attaquant.baisserMana(monstre.cout);
+            this.baisserMana(monstre.cout);
             this.monstres.push(monstre);
         }
     }

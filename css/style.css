@@ -89,29 +89,26 @@ html, body{
 }
 
 
-#zoneJeu{
-    width: 100%;
-    display: inline-block;
-    margin-left:300px;
-    margin-right:300px;
-}
-
-#zoneAttaquant li{
-
+#zoneAttaquant{
+    background: #f6f6f6;
+    -moz-box-shadow: 10px 10px 20px 0px #656565;
+    -webkit-box-shadow: 10px 10px 20px 0px #656565;
+    -o-box-shadow: 10px 10px 20px 0px #656565;
+    box-shadow: 10px 10px 20px 0px #656565;
+    width: 80%;
     list-style: none;
 }
 
 #listeMonstres li{
 
+    padding: 10px;
     display: inline-block;
 }
 
-#divAttaquant{
+meter{
+    width: 200px;
+}
 
-    border : 1px solid orangered;
-    background : yellowgreen;
-    width: 600px;
-    height: 75px;
-    margin-left: 300px;
-    margin-right: 300px;
+meter::-webkit-meter-optimum-value {
+    background: #6bbdff; /* Green */
 }

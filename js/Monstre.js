@@ -1,7 +1,8 @@
 class Monstre extends Forme{
 
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
+    constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
+        this.name = name;
         this.degat = degat;
         this.cout = cout;
     }
@@ -12,7 +13,10 @@ class Monstre extends Forme{
             //console.log("vrai");
             attaquant.monstres.splice(attaquant.monstres.indexOf(this), 1);
             this.attaquer(touche);
-            startDoubleExplosion(this.posX, this.posY);
+            if(this.degat <= 10)
+                startDoubleExplosion(this.posX, this.posY);
+            else if(this.degat > 10)
+                startBigExplosion(this.posX, this.posY);
         }
     }
 
@@ -20,15 +24,23 @@ class Monstre extends Forme{
         touche.pv -= this.degat;
     }
 
-    getMonstres(){
-        return[new Yellow(0, 0, "rgb(255,255,122)", 0, 0, 20, 20)]
+    static getMonstres(){
+        return[new Follower("BLUE" ,0, 0, "rgb(0, 0, 255)", 0, 0, 40, 40, 8, 2),
+            new Follower("YELLOW", 0, 0, "rgb(255,255,122)", 0, 0, 20, 20, 8, 2),
+            new Follower("BLACK" ,0, 0, "rgb(0,0,0)", 0, 0, 80, 80, 100, 9)
+        ];
+    }
+
+    setPositions(x, y){
+        this.posX = x;
+        this.posY = y;
     }
 }
 
 
 class Follower extends Monstre{
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
-        super(posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout);
+    constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
+        super(name, posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout);
     }
 
     suivre(posX, posY){
@@ -53,18 +65,5 @@ class Follower extends Monstre{
         }else{
             this.vitesseY = 0;
         }
-    }
-}
-
-class Yellow extends Follower{
-
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
-        super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
-    }
-}
-
-class Blue extends Follower{
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
-        super(posX, posY, couleur, vitesseX, vitesseY, width, height, 8, 2);
     }
 }
