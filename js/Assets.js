@@ -1,13 +1,8 @@
 class Assets{
 
     constructor(){
-        this.imgs = [
-            "../img/blue_card.png",
-            "../img/yellow_card.png",
-            "../img/black_card.png"
-        ];
-    }
 
+    }
 
     playSound(src){
         if(this.isAudio()){
@@ -40,7 +35,7 @@ class Assets{
     }
 
     static imgAreLoaded(){
-        var instancesImg = createInstanceImg();
+        //var instancesImg = Assets.createInstanceImg();
         var booleanDeNoel = [];
 
         var images = document.getElementsByTagName("img");
@@ -86,7 +81,11 @@ class Assets{
     }
 
     static getSrcImages(){
-        return this.imgs;
+        return [
+            "../img/blue_card.png",
+            "../img/yellow_card.png",
+            "../img/black_card.png"
+        ];
     }
 
     static getSrcAudios(){

@@ -54,7 +54,7 @@ class Follower extends Monstre{
     }
 
     suivre(posX, posY){
-        
+
         this.angle = this.calculerAngle(posX, posY);
         if (posX < this.posX) this.angle += Math.PI;
 
