@@ -28,35 +28,55 @@ class Forme{
         this.vitesseX = -this.vitesseX;
     }
 
+    stopX(){
+        this.posX = 0;
+    }
+
+    stopY(){
+        this.posY = 0;
+    }
+
     inverseSensDeplacementY() {
         this.vitesseY = -this.vitesseY;
     }
 
     testeCollisionZone(w, h) {
-        if(((this.posX+this.width) >  w) || (this.posX < 0)) {
-            this.inverseSensDeplacementX();
+        if(((this.posX+this.width) >  w)) {
+            //this.inverseSensDeplacementX();
+            this.posX = w-this.width;
+
+        }else if(this.posX <= 0){
+            this.stopX();
         }
-        if(((this.posY+this.height) >  h) || (this.posY < 0)) {
-            this.inverseSensDeplacementY();
+
+        if(((this.posY+this.height) >  h)) {
+            this.posY = h-this.height;
+        }else if(this.posY < 0){
+            this.stopY();
         }
     }
 }
 
 class Missile extends Forme{
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height){
-        super(posX ,posY, couleur, vitesseX, vitesseY, width, height);
+    constructor(couleur, defPosX, defPosY, width, height, vitesseX, vitesseY, angle){
+        super(defPosX+Math.sin(angle) - Math.cos(angle), defPosY - Math.cos(angle) - Math.sin(angle), couleur, vitesseX+Math.sin(angle)*10, vitesseY-Math.cos(angle)*10, width, height);
+
+        this.angle = angle;
     }
 
     draw(ctx){
         ctx.save();
         ctx.fillStyle = this.couleur;
-        ctx.fillRect(this.posX, this.posY, this.width, this.height);
+        ctx.translate(this.posX, this.posY);
+        ctx.rotate(this.angle);
+        ctx.fillRect(0, 0, this.width, this.height);
         ctx.restore();
     }
 
     move(){
         this.posX += this.vitesseX;
         this.posY += this.vitesseY;
+        //console.log(this.posX);
     }
 
     testCollisionEnnemi(ennemis){
