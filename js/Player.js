@@ -62,8 +62,7 @@ class Attaquant{
     drawZoneNonDraggable(ctx) {
         ctx.save();
         ctx.fillStyle = "rgb(125,125,125)";
-        ctx.globalAlpha = 0.2;
-        //console.log(this.zoneDraggable[0]);
+        ctx.globalAlpha = 0.5;
         ctx.fillRect(0, 0, this.zoneDraggable[0], this.zoneDraggable[1]);
         ctx.restore();
     }

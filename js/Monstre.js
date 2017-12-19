@@ -5,6 +5,11 @@ class Monstre extends Forme{
         this.name = name;
         this.degat = degat;
         this.cout = cout;
+        this.src = this.loadSrc();
+    }
+
+    loadSrc(){
+        return Assets.getSrcImage(this.name);
     }
 
     testCollision(touche){
@@ -34,6 +39,10 @@ class Monstre extends Forme{
     setPositions(x, y){
         this.posX = x;
         this.posY = y;
+    }
+
+    getSrc(){
+        return this.src;
     }
 }
 

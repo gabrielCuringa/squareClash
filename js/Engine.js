@@ -9,6 +9,9 @@ let armeOnPitch = false;
 let armesOnPitch = [];
 let showZoneNonDraggable = false;
 let pauseState = false;
+let imgLoaded = false;
+let assets = [];
+
 let background = new Image();
 const SRC = "../img/squareClashTitle.jpg";
 
@@ -21,11 +24,14 @@ function Engine() {
         ctx = canvas.getContext('2d');
         width = canvas.width;
         height = canvas.height;
-        background.src = SRC;
+
+        imgLoaded = Assets.imgAreLoaded();
 
         attaquant = creerAttaquant();
-        creerDeck();
         defenseur = creerDefenseur();
+        creerDeck();
+
+        background.src = SRC;
 
         gamepad.on('connect', function (event) {
             padConnected = true;
@@ -127,6 +133,16 @@ function Engine() {
 
         ctx.clearRect(0, 0, width, height);
 
+        if(imgLoaded){
+            jeu();
+        }else{
+            chargement();
+        }
+        requestAnimationFrame(anime);
+
+    }
+
+    function jeu() {
         if(pauseState){
             jeuPause();
         }else{
@@ -187,8 +203,6 @@ function Engine() {
             checkFin();
         }
 
-        requestAnimationFrame(anime);
-
     }
 
     
@@ -199,6 +213,15 @@ function Engine() {
 
         ctx.fillStyle = 'bold 16pt Helvetica';
         ctx.fillText("PAUSE", width/2, height/2);
+
+        ctx.restore();
+    }
+    
+    function chargement() {
+        ctx.save();
+
+        ctx.fillStyle = 'bold 16pt Helvetica';
+        ctx.fillText("CHARGEMENT...", width/2, height/2);
 
         ctx.restore();
     }
@@ -242,10 +265,14 @@ function Engine() {
 
         for(let i=0; i<Monstre.getMonstres().length; i++){
             var li = document.createElement("li");
-            li.setAttribute("draggable", "true");
-            li.setAttribute("ondragstart", "engine.dragStartHandler(event);");
-            li.setAttribute("data-value", Monstre.getMonstres()[i].name);
-            li.innerHTML = Monstre.getMonstres()[i].name;
+            var img = document.createElement("img");
+            img.setAttribute("draggable", "true");
+            img.setAttribute("ondragstart", "engine.dragStartHandler(event);");
+            img.setAttribute("ondragend", "engine.dragEndHandler(event);");
+            img.setAttribute("data-value", Monstre.getMonstres()[i].name);
+            //li.innerHTML = Monstre.getMonstres()[i].name;
+            //img.src = Monstre.getMonstres()[i].getSrc();
+            li.appendChild(img);
             ul.appendChild(li);
         }
 
@@ -256,6 +283,10 @@ function Engine() {
         event.dataTransfer.setData("monstre", event.target.dataset.value);
         console.log("start drag");
         showZoneNonDraggable = true;
+    }
+
+    function dragEndHandler() {
+        showZoneNonDraggable = false;
     }
     
     function spawnArme() {
@@ -307,7 +338,8 @@ function Engine() {
     return{
         init,
         dropHandler,
-        dragStartHandler
+        dragStartHandler,
+        dragEndHandler
     }
 
 }

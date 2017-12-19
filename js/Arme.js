@@ -1,14 +1,18 @@
 class Arme extends Forme{
 
-    constructor(name, posXJoueur, posYJoueur, couleur, degat, capacite, intervalleTir, son){
+    constructor(name, posXJoueur, posYJoueur, couleur, degat, capacite, intervalleTir){
         super(posXJoueur+15, posYJoueur-5, couleur, 0, 0, 40, 10);
         this.name = name;
         this.degat = degat;
         this.intervalleTir = intervalleTir;
         this.capaciteChargeur = capacite;
         this.ballesDispo = capacite;
-        this.son = son;
+        this.son = this.loadSrc();
         this.missiles = [];
+    }
+
+    loadSrc(){
+        return Assets.getSrcAudio(this.name);
     }
 
     tirer(x, y, angle){
@@ -47,8 +51,8 @@ class Arme extends Forme{
     }
 
     static getArmes(){
-        return [new Arme("DESTRUCTOR" ,0, 0, "rgb(255, 0, 0)", 4, 10, 500, "../son/destructor.mp3"),
-            new Arme("PISTOLET" ,0, 0, "rgb(150,134,253)", 100, 1, 500, "../son/destructor.mp3")
+        return [new Arme("DESTRUCTOR" ,0, 0, "rgb(255, 0, 0)", 4, 10, 500),
+            new Arme("BUFFATATOR" ,0, 0, "rgb(150,134,253)", 100, 1, 500)
         ];
     }
 
