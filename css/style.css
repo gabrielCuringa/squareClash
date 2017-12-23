@@ -9,7 +9,8 @@ html, body{
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    margin-left: 100px;
+    height: 80.67vh;
+    width: 100%;
 }
 
 #ZoneMenu{
@@ -94,7 +95,7 @@ html, body{
 }
 
 
-#zoneAttaquant{
+#zoneAttaquant ul{
     background: #f6f6f6;
     -moz-box-shadow: 10px 10px 20px 0px #656565;
     -webkit-box-shadow: 10px 10px 20px 0px #656565;
@@ -113,7 +114,7 @@ html, body{
 }
 
 meter{
-    width: 200px;
+    width: 100%;
 }
 
 meter::-webkit-meter-optimum-value {

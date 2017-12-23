@@ -10,7 +10,9 @@ let armesOnPitch = [];
 let showZoneNonDraggable = false;
 let pauseState = false;
 let imgLoaded = false;
-let assets = [];
+let deckCreated = false;
+let assetsLoaded = 0;
+let assetsCards = [];
 
 let background = new Image();
 const SRC = "../img/squareClashTitle.jpg";
@@ -25,11 +27,11 @@ function Engine() {
         width = canvas.width;
         height = canvas.height;
 
-        imgLoaded = Assets.imgAreLoaded();
+        Assets.loadImage(callbackAssets);
 
         attaquant = creerAttaquant();
         defenseur = creerDefenseur();
-        creerDeck();
+        //creerDeck();
 
         background.src = SRC;
 
@@ -198,11 +200,21 @@ function Engine() {
                 attaquant.drawZoneNonDraggable(ctx);
 
             updateAndDrawParticules(10, ctx);
-            updateMana();
+            if(deckCreated)
+                updateMana();
 
             checkFin();
         }
 
+    }
+    
+    function callbackAssets(loaded, instanceImg) {
+        //console.log(instanceImg.getAttribute("src"));
+        if(loaded){
+            assetsLoaded += 1;
+            assetsCards.push(instanceImg);
+        }
+        //console.log(assetsLoaded);
     }
 
     
@@ -216,8 +228,15 @@ function Engine() {
 
         ctx.restore();
     }
-    
+
     function chargement() {
+
+        //nb objets chargés sur le nombre d'objets à charger
+        if(assetsLoaded / Assets.getSrcCardImages().length === 1){
+            imgLoaded = true;
+            creerDeck();
+        }
+
         ctx.save();
 
         ctx.fillStyle = 'bold 16pt Helvetica';
@@ -247,25 +266,26 @@ function Engine() {
         document.querySelector("#mana").value = attaquant.mana;
     }
 
+    /**
+     * S'éxecute uniquement si les ressources (cartes) sont chargées
+     */
     function creerDeck() {
-        var zoneAttaquant = document.querySelector("#zoneAttaquant");
-        var ul = document.createElement("ul");
-        ul.id = "listeMonstres";
+        let zoneAttaquant = document.querySelector("#zoneAttaquant");
 
-        var liMana = document.createElement("li");
-        liMana.innerHTML = "";
-        var progressMana = document.createElement("meter");
+        //mana
+        let progressMana = document.createElement("meter");
         progressMana.id = "mana";
         progressMana.value = attaquant.mana;
         progressMana.max = attaquant.mana;
         progressMana.min = 0;
 
-        liMana.appendChild(progressMana);
-        ul.appendChild(liMana);
+        let ul = document.createElement("ul");
+        ul.id = "listeMonstres";
 
-        for(let i=0; i<Monstre.getMonstres().length; i++){
-            var li = document.createElement("li");
-            var img = document.createElement("img");
+        for(let i=0; i<assetsCards.length; i++){
+            let li = document.createElement("li");
+            //var img = document.createElement("img");
+            let img = assetsCards[i];
             img.setAttribute("draggable", "true");
             img.setAttribute("ondragstart", "engine.dragStartHandler(event);");
             img.setAttribute("ondragend", "engine.dragEndHandler(event);");
@@ -275,10 +295,13 @@ function Engine() {
             li.appendChild(img);
             ul.appendChild(li);
         }
+        zoneAttaquant.appendChild(progressMana);
 
         zoneAttaquant.appendChild(ul);
+
+        deckCreated = true;
     }
-    
+
     function dragStartHandler(event) {
         event.dataTransfer.setData("monstre", event.target.dataset.value);
         console.log("start drag");
@@ -301,6 +324,7 @@ function Engine() {
     }
     
     function dropHandler(event) {
+        console.log(event.clientX+" / "+event.clientY);
 
         showZoneNonDraggable = false;
         var data = event.dataTransfer.getData("monstre");

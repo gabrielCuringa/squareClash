@@ -26,38 +26,35 @@ class Assets{
 
     static createInstanceImg(){
         var imgsInstances = [];
-        this.imgs.forEach(function () {
+
+        Assets.getSrcCardImages().forEach(function () {
             var instance = new Image();
             imgsInstances.push(instance);
         });
-
+        //console.log(imgsInstances);
         return imgsInstances;
     }
 
-    static imgAreLoaded(){
-        //var instancesImg = Assets.createInstanceImg();
-        var booleanDeNoel = [];
+    static loadImage(callback){
+        var instancesImg = Assets.createInstanceImg();
+        //var booleanDeNoel = [];
+        var images = Assets.getSrcCardImages();
 
-        var images = document.getElementsByTagName("img");
-        for(let i=0; i<images.length; i++){
-            var datavalue = images[i].getAttribute("data-value");
-            console.log("data value "+datavalue);
-            images[i].src = datavalue;
-            images[i].addEventListener('load', function () {
-                booleanDeNoel.push(true);
+        //var images = document.getElementsByTagName("img");
+        for(let i=0; i<instancesImg.length; i++){
+            //var datavalue = images[i].getAttribute("data-value");
+            instancesImg[i].addEventListener('load',  () => {
+                //console.log("load");
+                //booleanDeNoel.push(true);
+                callback(true, instancesImg[i]);
             }, false);
-            images[i].addEventListener('error', function () {
-                booleanDeNoel.push(false);
+            instancesImg[i].addEventListener('error', ()=> {
+                //booleanDeNoel.push(false);
+                callback(false);
             });
+            instancesImg[i].src = images[i];
         }
 
-        for(let i=0; i<booleanDeNoel.length; i++){
-            if(!booleanDeNoel[i]){
-                return false;
-            }
-        }
-
-        return true;
     }
 
     loadAudio(){
@@ -66,11 +63,11 @@ class Assets{
 
     static getSrcImage(nom){
         if(nom === "BLUE"){
-            return Assets.getSrcImages()[0];
+            return Assets.getSrcCardImages()[0];
         }else if(nom === "YELLOW"){
-            return Assets.getSrcImages()[1];
+            return Assets.getSrcCardImages()[1];
         }else if(nom === "BLACK"){
-            return Assets.getSrcImages()[2];
+            return Assets.getSrcCardImages()[2];
         }
     }
 
@@ -80,11 +77,11 @@ class Assets{
         }
     }
 
-    static getSrcImages(){
+    static getSrcCardImages(){
         return [
-            "../img/blue_card.png",
-            "../img/yellow_card.png",
-            "../img/black_card.png"
+            "../img/blue_card.png"
+            /*"../img/yellow_card.png",
+            "../img/black_card.png"*/
         ];
     }
 
