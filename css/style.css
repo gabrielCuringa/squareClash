@@ -1,16 +1,22 @@
 html, body{
     overflow: hidden;
-    background-color: black;
+
 }
 
-#game{
-    border: 1px solid;
-    background: url(../img/backgroundBattle.jpg);
-    background-position: center;
+#htmlId{
+    background-color: #282828;
+}
+
+#game {
+    border: 1px solid #000000;
+    background: url(../img/gameplayBackground.jpg) no-repeat center center;
     background-size: cover;
-    background-repeat: no-repeat;
-    height: 80.67vh;
-    width: 100%;
+    width:auto;
+    height: auto;
+    margin-left: 30px;
+    transition:width 2s;
+
+
 }
 
 #ZoneMenu{
@@ -19,10 +25,8 @@ html, body{
 }
 
 #Canvas{
-    background: url(../img/squareClashTitle.jpg);
-    background-position: center;
+    background: url(../img/squareClashTitle.jpg) no-repeat center center;
     background-size: cover;
-    background-repeat: no-repeat;
     border: 1px solid #FFDD1B;
     margin-left:300px;
     margin-right:300px;
@@ -95,15 +99,14 @@ html, body{
 }
 
 
-#zoneAttaquant ul{
-    background: #f6f6f6;
-    -moz-box-shadow: 10px 10px 20px 0px #656565;
-    -webkit-box-shadow: 10px 10px 20px 0px #656565;
-    -o-box-shadow: 10px 10px 20px 0px #656565;
-    box-shadow: 10px 10px 20px 0px #656565;
+#zoneAttaquant{
+    background: url(../img/backgroundPanel.jpg) no-repeat center center;
+
+    box-shadow: 0px 0px 10px 0px #cdf1ff;
     width: 80%;
     list-style: none;
     margin-left: 120px;
+
 }
 
 
@@ -114,9 +117,9 @@ html, body{
 }
 
 meter{
-    width: 100%;
+    width: 200px;
 }
 
 meter::-webkit-meter-optimum-value {
-    background: #6bbdff; /* Green */
+    background: #B30D5D; /* Green */
 }
