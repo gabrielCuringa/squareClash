@@ -41,6 +41,7 @@ class Forme{
     }
 
     testeCollisionZone(w, h) {
+
         if(((this.posX+this.width) >  w)) {
             //this.inverseSensDeplacementX();
             this.posX = w-this.width;
@@ -87,6 +88,13 @@ class Missile extends Forme{
                 //joueur.incrementerScore();
                 startDoubleExplosion(this.posX, this.posY);
             }
+        }
+    }
+
+    testeCollisionZone(missiles, w, h) {
+
+        if(((this.posX+this.width) >  w) || (this.posX <= 0) || ((this.posY+this.height) >  h) || (this.posY < 0)) {
+            return true;
         }
     }
 }

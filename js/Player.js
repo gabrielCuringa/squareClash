@@ -79,7 +79,7 @@ class Attaquant{
 
 class Defenseur extends Player{
 
-    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, pv){
+    constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, pv, assets){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.pv = pv;
         this.armeActive = {};
@@ -91,6 +91,7 @@ class Defenseur extends Player{
         this.angle = 0;
         this.indexArmeActive = 0;
         this.base = new Base(1100, 150, "rgb(141, 200, 175)", 100, 300);
+        this.assets = assets;
     }
 
 
@@ -114,7 +115,7 @@ class Defenseur extends Player{
 
     ramasserArme(arme){
 
-        var checked = this.check(arme);
+        let checked = this.check(arme);
         if(checked === -1){
             this.armes.push(arme);
         }else{
@@ -151,7 +152,8 @@ class Defenseur extends Player{
         ctx.translate(this.centreX, this.centreY);
         ctx.rotate(this.angle);
         ctx.translate(-this.centreX, -this.centreY);
-        ctx.fillRect(0, 0, this.width, this.height);
+        //ctx.fillRect(0, 0, this.width, this.height);
+        ctx.drawImage(this.assets[0], 0, 0, this.width, this.height);
 
         ctx.restore();
     }

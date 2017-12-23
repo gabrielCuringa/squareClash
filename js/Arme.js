@@ -32,9 +32,9 @@ class Arme extends Forme{
 
         ctx.translate(this.posX+15, this.posY-10);
         ctx.fillStyle = this.couleur;
-        ctx.translate(defenseur.centreX, defenseur.centreY);
+        ctx.translate(defenseur.centreX-15, defenseur.centreY+10);
         ctx.rotate(defenseur.angle);
-        ctx.translate(-defenseur.centreX, -defenseur.centreY);
+        ctx.translate(-defenseur.centreX+15, -defenseur.centreY-10);
         ctx.fillRect(0, 0, this.width, this.height);
 
         ctx.restore();

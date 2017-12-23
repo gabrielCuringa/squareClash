@@ -24,21 +24,23 @@ class Assets{
         return (src.match(/\.(mp3|ogg|wav)$/) !== null);
     }
 
-    static createInstanceImg(){
+    static createInstanceImg(toLoad){
         var imgsInstances = [];
 
-        Assets.getSrcCardImages().forEach(function () {
+        Assets.getObjectToLoad(toLoad).forEach(function () {
             var instance = new Image();
+            instance.width = 100;
+            instance.height = 130;
             imgsInstances.push(instance);
         });
         //console.log(imgsInstances);
         return imgsInstances;
     }
 
-    static loadImage(callback){
-        var instancesImg = Assets.createInstanceImg();
+    static loadImage(callback, toLoad){
+        let instancesImg = Assets.createInstanceImg(toLoad);
         //var booleanDeNoel = [];
-        var images = Assets.getSrcCardImages();
+        let images = Assets.getObjectToLoad(toLoad);
 
         //var images = document.getElementsByTagName("img");
         for(let i=0; i<instancesImg.length; i++){
@@ -61,6 +63,15 @@ class Assets{
 
     }
 
+    static getObjectToLoad(toLoad){
+        let images = null;
+        if(toLoad === "cartes")
+            images = Assets.getSrcCardImages();
+        else if(toLoad === "joueur")
+            images = Assets.getSrcJoueurImage();
+        return images;
+    }
+
     static getSrcImage(nom){
         if(nom === "BLUE"){
             return Assets.getSrcCardImages()[0];
@@ -77,9 +88,13 @@ class Assets{
         }
     }
 
+    static getSrcJoueurImage(){
+        return ["../img/Personnages/HeroX.png"];
+    }
+
     static getSrcCardImages(){
         return [
-            "../img/blue_card.png"
+            "../img/CartesPersonnages/Buffatator.jpg"
             /*"../img/yellow_card.png",
             "../img/black_card.png"*/
         ];
@@ -89,5 +104,9 @@ class Assets{
         return[
             "../son/destructor.mp3",
         ];
+    }
+
+    static getLengthAllAssets(){
+        return Assets.getSrcJoueurImage().length + Assets.getSrcCardImages().length;
     }
 }

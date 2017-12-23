@@ -13,10 +13,8 @@ html, body{
     background-size: cover;
     width:auto;
     height: auto;
-    margin-left: 30px;
+    /*margin-left: 30px;*/
     transition:width 2s;
-
-
 }
 
 #ZoneMenu{
@@ -117,7 +115,7 @@ html, body{
 }
 
 meter{
-    width: 200px;
+    width: 100%;
 }
 
 meter::-webkit-meter-optimum-value {

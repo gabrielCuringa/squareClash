@@ -13,6 +13,7 @@ let imgLoaded = false;
 let deckCreated = false;
 let assetsLoaded = 0;
 let assetsCards = [];
+let assetsPlayer = [];
 
 let background = new Image();
 const SRC = "../img/squareClashTitle.jpg";
@@ -27,7 +28,10 @@ function Engine() {
         width = canvas.width;
         height = canvas.height;
 
-        Assets.loadImage(callbackAssets);
+        Assets.loadImage(callbackAssetsCards, "cartes");
+        Assets.loadImage(callbackAssetsPlayer, "joueur");
+
+        document.querySelector("#game").style.marginLeft = "30px";
 
         attaquant = creerAttaquant();
         defenseur = creerDefenseur();
@@ -72,10 +76,7 @@ function Engine() {
         });
 
         gamepad.on('press', 'start', function (event) {
-            if(!pauseState)
-                pauseState = true;
-            else
-                pauseState = false;
+            pauseState = !pauseState;
         });
 
         // PS4 : X et XBOX : A
@@ -172,6 +173,9 @@ function Engine() {
                 missile.draw(ctx);
                 missile.move();
                 missile.testCollisionEnnemi(attaquant.monstres);
+                if(missile.testeCollisionZone(width, height)){
+                    defenseur.armeActive.missiles.splice(defenseur.armeActive.missiles.indexOf(missile), 1);
+                }
             });
 
             attaquant.monstres.forEach(function (monstre) {
@@ -208,13 +212,20 @@ function Engine() {
 
     }
     
-    function callbackAssets(loaded, instanceImg) {
+    function callbackAssetsCards(loaded, instanceImg) {
         //console.log(instanceImg.getAttribute("src"));
         if(loaded){
             assetsLoaded += 1;
             assetsCards.push(instanceImg);
         }
-        //console.log(assetsLoaded);
+    }
+
+    function callbackAssetsPlayer(loaded, instanceImg) {
+        //console.log(instanceImg.getAttribute("src"));
+        if(loaded){
+            assetsLoaded += 1;
+            assetsPlayer.push(instanceImg);
+        }
     }
 
     
@@ -232,7 +243,7 @@ function Engine() {
     function chargement() {
 
         //nb objets chargés sur le nombre d'objets à charger
-        if(assetsLoaded / Assets.getSrcCardImages().length === 1){
+        if(assetsLoaded / Assets.getLengthAllAssets() === 1){
             imgLoaded = true;
             creerDeck();
         }
@@ -258,7 +269,7 @@ function Engine() {
         let x = 250;
         let y = 250;
 
-        return new Defenseur(x, y, "rgb(125,125,125)", 0, 0, 70, 30, 100);
+        return new Defenseur(x, y, "rgb(125,125,125)", 0, 0, 70, 30, 100, assetsPlayer);
     }
 
     function updateMana() {
@@ -295,7 +306,7 @@ function Engine() {
             li.appendChild(img);
             ul.appendChild(li);
         }
-        zoneAttaquant.appendChild(progressMana);
+        document.body.insertBefore(progressMana ,zoneAttaquant);
 
         zoneAttaquant.appendChild(ul);
 
@@ -313,9 +324,9 @@ function Engine() {
     }
     
     function spawnArme() {
-        var size = Arme.getArmes().length-1;
+        let size = Arme.getArmes().length-1;
         if(!armeOnPitch){
-            var arme = Arme.getArmes()[Math.round(Math.random()*size)];
+            let arme = Arme.getArmes()[Math.round(Math.random()*size)];
             arme.posX = Math.round(Math.random()*width);
             arme.posY = Math.round(Math.random()*height);
             armesOnPitch.push(arme);
@@ -324,10 +335,12 @@ function Engine() {
     }
     
     function dropHandler(event) {
-        console.log(event.clientX+" / "+event.clientY);
+        let x = event.clientX;
+        let y = event.clientY;
+        console.log(x+" / "+event.clientY);
 
         showZoneNonDraggable = false;
-        var data = event.dataTransfer.getData("monstre");
+        let data = event.dataTransfer.getData("monstre");
 
         if(attaquant.iCanDrag(event.clientX, event.clientY)){
             if(data === "BLUE"){
@@ -338,7 +351,7 @@ function Engine() {
             }else if(data === "BLACK"){
                 index = 2;
             }
-            attaquant.ajouterMonstre(Monstre.getMonstres()[index], event.clientX, event.clientY);
+            attaquant.ajouterMonstre(Monstre.getMonstres()[index], x, y);
 
             if(cptDropped === 0){
                 attaquant.regenererMana();
