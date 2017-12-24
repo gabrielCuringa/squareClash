@@ -9,12 +9,17 @@ let armeOnPitch = false;
 let armesOnPitch = [];
 let showZoneNonDraggable = false;
 let pauseState = false;
+let finState = false;
 let imgLoaded = false;
 let deckCreated = false;
 let assetsLoaded = 0;
 let assetsCards = [];
 let assetsPlayer = [];
 let assetsPersos = [];
+let TXT_FIN = "";
+const timeToPlay = 150000; //2 minutes 30
+let cptTimer = 0;
+let minuteur = timeToPlay;
 
 let background = new Image();
 const SRC = "../img/squareClashTitle.jpg";
@@ -131,6 +136,8 @@ function Engine() {
             defenseur.vitesseX = 0;
         }, false);
 
+        lancerTimer();
+
         requestAnimationFrame(anime);
     }
 
@@ -150,7 +157,13 @@ function Engine() {
     function jeu() {
         if(pauseState){
             jeuPause();
+        }else if(finState){
+            lancerFinJeu();
         }else{
+
+            drawMinuteur();
+            cptTimer+=1;
+
             defenseur.draw(ctx);
             defenseur.drawVie(ctx);
             defenseur.testeCollisionZone(width, height);
@@ -209,9 +222,28 @@ function Engine() {
             if(deckCreated)
                 updateMana();
 
+            if(cptTimer === 60){
+                minuteur -= 1000;
+                cptTimer = 0;
+            }
+
+
             checkFin();
         }
 
+    }
+
+    function drawMinuteur() {
+        ctx.save();
+
+        let min = Math.trunc(minuteur/60000);
+        let sec = minuteur/1000%60;
+
+        ctx.font = "bold 16pt Helvetica";
+        ctx.fillStyle = "white";
+        ctx.fillText(min+" : "+sec, 30, 30);
+
+        ctx.restore();
     }
     
     function callbackAssetsCards(loaded, instanceImg) {
@@ -404,12 +436,25 @@ function Engine() {
     }
 
     function lancerFinJeu() {
-        //console.log("fin");
+        ctx.save();
+        ctx.font = "16pt bold Helvetica";
+        ctx.fillStyle = "white";
+        ctx.fillText(TXT_FIN, width/2, height/2);
+
+        ctx.restore();
+    }
+
+    function lancerTimer() {
+        let timer = setTimeout(function () {
+            finState = true;
+        }, timeToPlay);
+        TXT_FIN = "Le défenseur a gagné";
     }
 
     function checkFin() {
         if(defenseur.pv <= 0 || defenseur.base.pv <= 0){
-            lancerFinJeu();
+            TXT_FIN = "L'attaquant a gagné";
+            finState = true;
         }
     }
 

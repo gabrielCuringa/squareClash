@@ -93,21 +93,21 @@ class Attaquant{
         for(let i=0; i<this.assets.length; i++){
 
             if (this.assets[i].name === "BUFFATATOR") {
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 3, 250 ,this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 10, 3, 250 ,this.assets[i]));
             } else if(this.assets[i].name === "DONATELLO"){
                 tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 60, 7, 500 ,this.assets[i]));
             } else if (this.assets[i].name === "DUBOITAGE") {
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 2, 2, 40, 40, 8, 2, 75, this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 2, 2, 40, 40, 5, 2, 75, this.assets[i]));
             } else if (this.assets[i].name === "FUKOUSHIMA") {
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 1, 1, 40, 40, 8, 6, 300, this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 1, 1, 40, 40, 39, 6, 300, this.assets[i]));
             } else if (this.assets[i].name === "KARIBOUCHON") {
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 2, 60, this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 4, 2, 60, this.assets[i]));
             }else if(this.assets[i].name === "MIRANDALOUSE"){
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 3, 100, this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 1.5, 1.5, 40, 40, 8, 3, 100, this.assets[i]));
             } else if (this.assets[i].name === "TETTAMINATOR") {
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 5, 150, this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 1, 1, 40, 40, 50, 5, 150, this.assets[i]));
             } else if (this.assets[i].name === "TOUNSISAILLE") {
-                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 3, 3, 40, 40, 8, 2, 90, this.assets[i]));
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 3, 3, 40, 40, 7, 2, 90, this.assets[i]));
             }
         }
 

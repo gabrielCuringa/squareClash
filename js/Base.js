@@ -10,8 +10,11 @@ class Base extends Forme{
     }
 
     drawVie(ctx){
+        ctx.save();
         ctx.font = 'bold 16pt Helvetica';
+        ctx.fillStyle = "white";
         ctx.textAlign = 'center';
         ctx.fillText("Pv : "+this.pv, this.posX+50, this.posY-5);
+        ctx.restore();
     }
 }
