@@ -10,7 +10,6 @@ let vitesseX, vitesseY;
         width = canvas.width;
         height = canvas.height;
 
-
         requestAnimationFrame(anime);
     }
 
@@ -25,15 +24,13 @@ let vitesseX, vitesseY;
             ctx.fillStyle = pattern;
             ctx.fillRect(500,160,30,30);
         };
-        ctx.move();
+        move();
         ctx.restore();
 
         //requestAnimationFrame(anime);
     }
 
     function move(e){
-
-
 
     }
 

@@ -1,11 +1,13 @@
 class Monstre extends Forme{
 
-    constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
+    constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout, pv, card){
         super(posX, posY, couleur, vitesseX, vitesseY, width, height);
         this.name = name;
         this.degat = degat;
         this.cout = cout;
-        this.src = this.loadSrc();
+        this.card = card;
+        this.pv = pv;
+        //this.src = this.loadSrc();
     }
 
     loadSrc(){
@@ -13,7 +15,6 @@ class Monstre extends Forme{
     }
 
     testCollision(touche){
-        //console.log('posX : '+this.posX);
         if(!((this.posX >= touche.posX + touche.width) || (this.posX + this.width <= touche.posX) || (this.posY >= touche.posY + touche.height) || (this.posY + this.height <= touche.posY))){
             //console.log("vrai");
             attaquant.monstres.splice(attaquant.monstres.indexOf(this), 1);
@@ -25,21 +26,34 @@ class Monstre extends Forme{
         }
     }
 
-    attaquer(touche){
-        touche.pv -= this.degat;
+    isDead(){
+        return (this.pv <= 0);
     }
 
-    static getMonstres(){
-        return[new Follower("BLUE" ,0, 0, "rgb(0, 0, 255)", 2, 2, 40, 40, 8, 2),
-            new Follower("YELLOW", 0, 0, "rgb(255,255,122)", 2, 2, 20, 20, 8, 2),
-            new Follower("BLACK" ,0, 0, "rgb(0,0,0)", 0.5, 0.5, 80, 80, 100, 9)
-        ];
+    baisserVie(degats){
+        this.pv -= degats;
+    }
+
+    attaquer(touche){
+        touche.pv -= this.degat;
     }
 
     setPositions(x, y){
         this.posX = x;
         this.posY = y;
     }
+
+    draw(ctx){
+        ctx.save();
+        ctx.translate(this.posX, this.posY);
+        //ctx.fillStyle = this.couleur;
+        ctx.fillText(this.pv, 15, 0);
+        ctx.drawImage(this.card ,0, 0, this.width, this.height);
+
+        ctx.restore();
+    }
+
+
 
     getSrc(){
         return this.src;
@@ -48,8 +62,8 @@ class Monstre extends Forme{
 
 
 class Follower extends Monstre{
-    constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout){
-        super(name, posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout);
+    constructor(name, posX ,posY, couleur, vitesseX, vitesseY, width, height, degat, cout, pv, card){
+        super(name, posX, posY, couleur, vitesseX, vitesseY, width, height, degat, cout, pv, card);
         this.angle = 0;
     }
 
@@ -65,5 +79,12 @@ class Follower extends Monstre{
 
     calculerAngle(posX, posY){
         return  Math.atan((this.posY - posY)/(this.posX - posX));
+    }
+
+    whosFollowed(){
+        if(this.vitesseX < 1 || this.vitesseY < 1) //se dirige vers la base
+            return 0;
+        else
+            return 1; //se dirige vers le défenseur
     }
 }

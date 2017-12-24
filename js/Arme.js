@@ -1,7 +1,7 @@
 class Arme extends Forme{
 
     constructor(name, posXJoueur, posYJoueur, couleur, degat, capacite, intervalleTir){
-        super(posXJoueur+15, posYJoueur-5, couleur, 0, 0, 40, 10);
+        super(posXJoueur, posYJoueur, couleur, 0, 0, 30, 10);
         this.name = name;
         this.degat = degat;
         this.intervalleTir = intervalleTir;
@@ -16,10 +16,10 @@ class Arme extends Forme{
     }
 
     tirer(x, y, angle){
-        console.log(this.posX);
+        //console.log(this.posX);
         if(this.ballesDispo !== 0){
-            console.log("balles dispo "+this.ballesDispo);
-            this.missiles.push(new Missile(this.couleur, x, y, 12, 12, defenseur.vitesseX, defenseur.vitesseY, angle));
+            //console.log("balles dispo "+this.ballesDispo);
+            this.missiles.push(new Missile(this.couleur, x, y, 12, 12, defenseur.vitesseX, defenseur.vitesseY, angle, this.degat));
             this.ballesDispo -= 1;
             this.jouerSon();
         }else{
@@ -51,8 +51,8 @@ class Arme extends Forme{
     }
 
     static getArmes(){
-        return [new Arme("DESTRUCTOR" ,0, 0, "rgb(255, 0, 0)", 4, 10, 500),
-            new Arme("BUFFATATOR" ,0, 0, "rgb(150,134,253)", 100, 1, 500)
+        return [new Arme("PISTOLET" ,0, 0, "rgb(255, 255, 255)", 10, 10, 500),
+            new Arme("DESTRUCTOR" ,0, 0, "rgb(150,134,253)", 100, 5, 1000)
         ];
     }
 
@@ -70,7 +70,7 @@ class Arme extends Forme{
     }
 
     jouerSon(){
-        var audio = new Audio(this.son);
+        let audio = new Audio(this.son);
         audio.play();
     }
 }

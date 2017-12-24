@@ -14,6 +14,7 @@ let deckCreated = false;
 let assetsLoaded = 0;
 let assetsCards = [];
 let assetsPlayer = [];
+let assetsPersos = [];
 
 let background = new Image();
 const SRC = "../img/squareClashTitle.jpg";
@@ -29,12 +30,13 @@ function Engine() {
         height = canvas.height;
 
         Assets.loadImage(callbackAssetsCards, "cartes");
+        Assets.loadImage(callbackAssetsPersonnages, "personnages");
         Assets.loadImage(callbackAssetsPlayer, "joueur");
 
         document.querySelector("#game").style.marginLeft = "30px";
 
-        attaquant = creerAttaquant();
-        defenseur = creerDefenseur();
+        /*attaquant = creerAttaquant();
+        defenseur = creerDefenseur();*/
         //creerDeck();
 
         background.src = SRC;
@@ -86,7 +88,7 @@ function Engine() {
                 defenseur.tirer();
             }
             canShoot = false;
-            console.log(defenseur.armes);
+            //console.log(defenseur.armes);
             //console.log("defenseur pos -> "+defenseur.posX+", "+defenseur.posY);
         });
 
@@ -172,7 +174,7 @@ function Engine() {
             defenseur.armeActive.missiles.forEach(function (missile) {
                 missile.draw(ctx);
                 missile.move();
-                missile.testCollisionEnnemi(attaquant.monstres);
+                missile.testCollisionEnnemi(attaquant.monstres, defenseur.armeActive.missiles);
                 if(missile.testeCollisionZone(width, height)){
                     defenseur.armeActive.missiles.splice(defenseur.armeActive.missiles.indexOf(missile), 1);
                 }
@@ -182,10 +184,10 @@ function Engine() {
                 monstre.draw(ctx);
                 //monstre.move();
                 monstre.testeCollisionZone(width, height);
-                if(monstre.name === "YELLOW"){
+                if(monstre.whosFollowed() === 1){
                     monstre.suivre(defenseur.posX, defenseur.posY);
                     monstre.testCollision(defenseur);
-                }else if((monstre.name === "BLACK") || (monstre.name === "BLUE")){
+                }else if(monstre.whosFollowed() === 0){
                     monstre.suivre(defenseur.base.posX, defenseur.base.posY);
                     monstre.testCollision(defenseur.base);
                 }
@@ -220,6 +222,14 @@ function Engine() {
         }
     }
 
+    function callbackAssetsPersonnages(loaded, instanceImg) {
+        //console.log(instanceImg.getAttribute("src"));
+        if(loaded){
+            assetsLoaded += 1;
+            assetsPersos.push(instanceImg);
+        }
+    }
+
     function callbackAssetsPlayer(loaded, instanceImg) {
         //console.log(instanceImg.getAttribute("src"));
         if(loaded){
@@ -245,6 +255,8 @@ function Engine() {
         //nb objets chargés sur le nombre d'objets à charger
         if(assetsLoaded / Assets.getLengthAllAssets() === 1){
             imgLoaded = true;
+            attaquant = creerAttaquant();
+            defenseur = creerDefenseur();
             creerDeck();
         }
 
@@ -260,8 +272,9 @@ function Engine() {
 
         let x = 250;
         let y = 250;
+        console.log(assetsPersos);
 
-        return new Attaquant();
+        return new Attaquant(assetsPersos);
     }
 
     function creerDefenseur() {
@@ -269,7 +282,7 @@ function Engine() {
         let x = 250;
         let y = 250;
 
-        return new Defenseur(x, y, "rgb(125,125,125)", 0, 0, 70, 30, 100, assetsPlayer);
+        return new Defenseur(x, y, "rgb(125,125,125)", 0, 0, 50, 50, 100, assetsPlayer);
     }
 
     function updateMana() {
@@ -300,7 +313,7 @@ function Engine() {
             img.setAttribute("draggable", "true");
             img.setAttribute("ondragstart", "engine.dragStartHandler(event);");
             img.setAttribute("ondragend", "engine.dragEndHandler(event);");
-            img.setAttribute("data-value", Monstre.getMonstres()[i].name);
+            img.setAttribute("data-value", assetsCards[i].name);
             //li.innerHTML = Monstre.getMonstres()[i].name;
             //img.src = Monstre.getMonstres()[i].getSrc();
             li.appendChild(img);
@@ -343,15 +356,9 @@ function Engine() {
         let data = event.dataTransfer.getData("monstre");
 
         if(attaquant.iCanDrag(event.clientX, event.clientY)){
-            if(data === "BLUE"){
-                index = 0;
-            }else if(data === "YELLOW"){
-                //ne pas oublier de setter la posX et Y avec event.client
-                index = 1;
-            }else if(data === "BLACK"){
-                index = 2;
-            }
-            attaquant.ajouterMonstre(Monstre.getMonstres()[index], x, y);
+            let index = getMonstreIndex(data);
+            //attaquant.ajouterMonstre(attaquant.getMonstres()[index], x, y);
+            attaquant.ajouterMonstre(attaquant.getMonstres(data), x, y);
 
             if(cptDropped === 0){
                 attaquant.regenererMana();
@@ -360,6 +367,40 @@ function Engine() {
         }else{
             console.log("zone de dépôt de monstre dépassé");
         }
+    }
+
+    function getMonstreIndex(name) {
+        let index = 0;
+
+        switch (name){
+            case "BUFFATATOR":
+                index=0;
+                break;
+            case "DONATELLO":
+                index=1;
+                break;
+            case "DUBOITAGE":
+                index=2;
+                break;
+            case "FUKOUSHIMA":
+                index=3;
+                break;
+            case "KARIBOUCHON":
+                index=4;
+                break;
+            case "MIRANDALOUSE":
+                index=5;
+                break;
+            case "TETTAMINATOR":
+                index=6;
+                break;
+            case "TOUNSISAILLE":
+                index=7;
+                break;
+            default:
+                index=0;
+        }
+        return index;
     }
 
     function lancerFinJeu() {

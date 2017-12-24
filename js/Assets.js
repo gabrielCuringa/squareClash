@@ -25,10 +25,10 @@ class Assets{
     }
 
     static createInstanceImg(toLoad){
-        var imgsInstances = [];
+        let imgsInstances = [];
 
         Assets.getObjectToLoad(toLoad).forEach(function () {
-            var instance = new Image();
+            let instance = new Image();
             instance.width = 100;
             instance.height = 130;
             imgsInstances.push(instance);
@@ -54,6 +54,8 @@ class Assets{
                 //booleanDeNoel.push(false);
                 callback(false);
             });
+            //console.log(images[i]);
+            instancesImg[i].name = Assets.getFileName(images[i]);
             instancesImg[i].src = images[i];
         }
 
@@ -69,16 +71,28 @@ class Assets{
             images = Assets.getSrcCardImages();
         else if(toLoad === "joueur")
             images = Assets.getSrcJoueurImage();
+        else if(toLoad === "personnages")
+            images = Assets.getSrcPersosImages();
         return images;
     }
 
     static getSrcImage(nom){
-        if(nom === "BLUE"){
+        if(nom === "BUFFATATOR"){
             return Assets.getSrcCardImages()[0];
-        }else if(nom === "YELLOW"){
+        }else if(nom === "DONATELLO"){
             return Assets.getSrcCardImages()[1];
-        }else if(nom === "BLACK"){
+        }else if(nom === "DUBOITAGE"){
             return Assets.getSrcCardImages()[2];
+        }else if(nom === "FUKOUSHIMA"){
+            return Assets.getSrcCardImages()[3];
+        }else if(nom === "KARIBOUCHON"){
+            return Assets.getSrcCardImages()[4];
+        }else if(nom === "MIRANDALOUSE"){
+            return Assets.getSrcCardImages()[5];
+        }else if(nom === "TETTAMINATOR"){
+            return Assets.getSrcCardImages()[6];
+        }else if(nom === "TOUNSISAILLE"){
+            return Assets.getSrcCardImages()[7];
         }
     }
 
@@ -92,12 +106,35 @@ class Assets{
         return ["../img/Personnages/HeroX.png"];
     }
 
+    static getSrcPersosImages(){
+        return [
+            "../img/Personnages/Buffatator.png",
+            "../img/Personnages/Donatello.png",
+            "../img/Personnages/Duboitage.png",
+            "../img/Personnages/Fukoushima.png",
+            "../img/Personnages/Karibouchon.png",
+            "../img/Personnages/Mirandalouse.png",
+            "../img/Personnages/Tettaminator.png",
+            "../img/Personnages/Tounsisaille.png"
+        ];
+    }
+
     static getSrcCardImages(){
         return [
-            "../img/CartesPersonnages/Buffatator.jpg"
-            /*"../img/yellow_card.png",
-            "../img/black_card.png"*/
+            "../img/CartesPersonnages/Buffatator.jpg",
+            "../img/CartesPersonnages/Donatello.jpg",
+            "../img/CartesPersonnages/Duboitage.jpg",
+            "../img/CartesPersonnages/Fukoushima.jpg",
+            "../img/CartesPersonnages/Karibouchon.jpg",
+            "../img/CartesPersonnages/Mirandalouse.jpg",
+            "../img/CartesPersonnages/Tettaminator.jpg",
+            "../img/CartesPersonnages/Tounsisaille.jpg"
         ];
+    }
+
+    static getFileName(name){
+        let filename = name.match(/[-_\w]+[.][\w]+$/i)[0].substring(0, name.lastIndexOf('.')+1);
+        return filename.split('.')[0].toUpperCase();
     }
 
     static getSrcAudios(){
@@ -107,6 +144,6 @@ class Assets{
     }
 
     static getLengthAllAssets(){
-        return Assets.getSrcJoueurImage().length + Assets.getSrcCardImages().length;
+        return Assets.getSrcJoueurImage().length + Assets.getSrcCardImages().length + Assets.getSrcPersosImages().length;
     }
 }

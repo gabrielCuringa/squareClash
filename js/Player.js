@@ -1,3 +1,5 @@
+const TXT_DRAGGABLE = "Zone de dépôt";
+
 class Player extends Forme{
 
     constructor(posX ,posY, couleur, vitesseX, vitesseY, width, height, pv){
@@ -9,10 +11,12 @@ class Player extends Forme{
 
 class Attaquant{
 
-    constructor(){
+    constructor(assets){
+        this.assets = assets;
         this.mana = 10;
         this.monstres = [];
         this.zoneDraggable = [width/2, height];
+        this.allMonsters = this.createMonster();
     }
 
     baisserMana(perte){
@@ -22,7 +26,7 @@ class Attaquant{
     regenererMana(){
 
         let intervalle = null;
-        var self = this;
+        let self = this;
 
         if(this.mana !== 10){
             intervalle = setInterval(function () {
@@ -61,6 +65,7 @@ class Attaquant{
 
     drawZoneNonDraggable(ctx) {
         ctx.save();
+        ctx.fillText(TXT_DRAGGABLE, this.zoneDraggable[0]/2, this.zoneDraggable[1]/2);
         ctx.fillStyle = "rgb(125,125,125)";
         ctx.globalAlpha = 0.5;
         ctx.fillRect(0, 0, this.zoneDraggable[0], this.zoneDraggable[1]);
@@ -71,10 +76,45 @@ class Attaquant{
         return !((x > this.zoneDraggable[0]) || (y > this.zoneDraggable[1]));
     }
 
-    attaquer(monstre){
+    getMonstres(nom){
 
+        for(let i=0; i<this.allMonsters.length; i++){
+            if(this.allMonsters[i].name === nom){
+                return this.allMonsters[i];
+            }
+        }
+        return null;
     }
 
+    createMonster() {
+
+        let tab = [];
+
+        for(let i=0; i<this.assets.length; i++){
+
+            if (this.assets[i].name === "BUFFATATOR") {
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 3, 250 ,this.assets[i]));
+            } else if(this.assets[i].name === "DONATELLO"){
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 60, 7, 500 ,this.assets[i]));
+            } else if (this.assets[i].name === "DUBOITAGE") {
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 2, 2, 40, 40, 8, 2, 75, this.assets[i]));
+            } else if (this.assets[i].name === "FUKOUSHIMA") {
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 1, 1, 40, 40, 8, 6, 300, this.assets[i]));
+            } else if (this.assets[i].name === "KARIBOUCHON") {
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 2, 60, this.assets[i]));
+            }else if(this.assets[i].name === "MIRANDALOUSE"){
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 3, 100, this.assets[i]));
+            } else if (this.assets[i].name === "TETTAMINATOR") {
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 0.5, 0.5, 40, 40, 8, 5, 150, this.assets[i]));
+            } else if (this.assets[i].name === "TOUNSISAILLE") {
+                tab.push(new Follower(this.assets[i].name, 0, 0, "rgb(0, 0, 255)", 3, 3, 40, 40, 8, 2, 90, this.assets[i]));
+            }
+        }
+
+        console.log(tab);
+        return tab;
+
+    }
 }
 
 class Defenseur extends Player{
@@ -98,7 +138,7 @@ class Defenseur extends Player{
     drawVie(ctx){
         ctx.save();
         ctx.font = 'bold 16pt Helvetica';
-        ctx.fillText(this.pv, this.posX+15, this.posY+50);
+        ctx.fillText(this.pv, this.posX+25, this.posY+70);
         ctx.restore();
     }
 
@@ -132,6 +172,8 @@ class Defenseur extends Player{
 
         this.armeActive = this.armes[this.indexArmeActive];
         this.indexArmeActive +=1;
+
+        console.log("degat --> "+this.degat);
     }
 
     check(arme){
@@ -153,6 +195,8 @@ class Defenseur extends Player{
         ctx.rotate(this.angle);
         ctx.translate(-this.centreX, -this.centreY);
         //ctx.fillRect(0, 0, this.width, this.height);
+
+        //on s'est assuré que l'image est bien chargée
         ctx.drawImage(this.assets[0], 0, 0, this.width, this.height);
 
         ctx.restore();
@@ -164,7 +208,7 @@ class Defenseur extends Player{
 
     tirer(){
         this.armeActive.tirer(this.posX, this.posY, this.angle);
-        console.log(this.armeActive.posX);
+        //console.log(this.armeActive.posX);
     }
 
     collisionArme(armes){
@@ -175,7 +219,7 @@ class Defenseur extends Player{
                 this.ramasserArme(armes[i]);
                 armes.splice(armes.indexOf(armes[i]), 1)
                 //console.log("oiu");
-                var timeout = setTimeout(function () {
+                let timeout = setTimeout(function () {
                     armeOnPitch = false;
                 }, 10000);
             }

@@ -59,10 +59,10 @@ class Forme{
 }
 
 class Missile extends Forme{
-    constructor(couleur, defPosX, defPosY, width, height, vitesseX, vitesseY, angle){
-        super(defPosX+Math.sin(angle) - Math.cos(angle), defPosY - Math.cos(angle) - Math.sin(angle), couleur, vitesseX+Math.sin(angle)*10, vitesseY-Math.cos(angle)*10, width, height);
-
+    constructor(couleur, defPosX, defPosY, width, height, vitesseX, vitesseY, angle, degat){
+        super(defPosX+Math.sin(angle) - Math.cos(angle), defPosY - Math.cos(angle) - Math.sin(angle), couleur, 10*Math.cos(angle-Math.PI/2), 10*Math.sin(angle-Math.PI/2), width, height);
         this.angle = angle;
+        this.degat = degat;
     }
 
     draw(ctx){
@@ -75,23 +75,28 @@ class Missile extends Forme{
     }
 
     move(){
+        //console.log("vitesse x : "+this.vitesseX);
         this.posX += this.vitesseX;
         this.posY += this.vitesseY;
-        //console.log(this.posX);
     }
 
-    testCollisionEnnemi(ennemis){
+    testCollisionEnnemi(ennemis, missiles){
         //console.log('posX : '+this.posX);
         for(let i=0; i<ennemis.length ; i++){
             if(!((this.posX >= ennemis[i].posX + ennemis[i].width) || (this.posX + this.width <= ennemis[i].posX) || (this.posY >= ennemis[i].posY + ennemis[i].height) || (this.posY + this.height <= ennemis[i].posY))){
-                ennemis.splice(ennemis.indexOf(ennemis[i]), 1);
-                //joueur.incrementerScore();
-                startDoubleExplosion(this.posX, this.posY);
+
+                ennemis[i].baisserVie(this.degat);
+                missiles.splice(this, 1);
+
+                if(ennemis[i].isDead()){
+                    ennemis.splice(ennemis.indexOf(ennemis[i]), 1);
+                    startDoubleExplosion(this.posX, this.posY);
+                }
             }
         }
     }
 
-    testeCollisionZone(missiles, w, h) {
+    testeCollisionZone(w, h) {
 
         if(((this.posX+this.width) >  w) || (this.posX <= 0) || ((this.posY+this.height) >  h) || (this.posY < 0)) {
             return true;
